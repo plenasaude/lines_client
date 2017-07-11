@@ -1,15 +1,15 @@
 const electron = require('electron')
-const main = electron.remote.require('./main')
+const totem = electron.remote.require('./src/totem')
 
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('normal_queue')
     .addEventListener('click', () => {
-      main.nextNormalQueue()
+      totem.nextNormalQueue()
     })
 
   document.getElementById('preferencial_queue')
     .addEventListener('click', () => {
-      main.nextPreferencialQueue()
+      totem.nextPreferencialQueue()
     })
 
   electron.ipcRenderer.on('data', (event, data) => {
