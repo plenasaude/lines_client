@@ -1,20 +1,24 @@
 {
-  "name": "electron_queue",
-  "version": "1.0.0",
-  "description": "",
+  "name": "edoc",
+  "version": "0.0.1",
+  "description": "eDoc lines clients",
   "main": "main.js",
   "scripts": {
-    "build": "npm install && electron-packager . eDoc --platform win32 --arch x64",
-    "start": "electron ."
+    "pack": "electron-builder --dir",
+    "dist:win": "electron-builder --windows --x64"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "eDoc Saude <contato@edocsaude.com>",
+  "build": {
+    "appId": "com.electron.edoc",
+    "productName": "eDoc",
+    "compression": "store"
+  },
   "devDependencies": {
     "electron": "^1.6.11",
-    "electron-packager": "^8.7.2"
+    "electron-builder": "^19.13.0"
   },
   "dependencies": {
-    "axios": "^0.16.2"
+    "axios": "^0.16.2",
+    "electron-updater": "^2.4.5"
   }
 }
