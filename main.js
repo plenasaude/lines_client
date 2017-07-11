@@ -36,12 +36,6 @@ app.on('ready', createWindow)
 
 app.on('window-all-closed', () => app.quit())
 
-
-function sendStatusToWindow(text) {
-  log.info(text)
-  win.webContents.send('message', text)
-}
-
 app.on('ready', function()  {
-  if (!isDev) autoupdate.run(autoUpdater, sendStatusToWindow)
+  if (!isDev) autoupdate.run(autoUpdater, win, log)
 })

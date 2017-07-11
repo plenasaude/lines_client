@@ -1,4 +1,9 @@
-function init(autoUpdater, sendStatusToWindow) {
+exports.run = function run(autoUpdater, win, log) {
+  function sendStatusToWindow(text) {
+    log.info(text)
+    win.webContents.send('message', text)
+  }
+
   autoUpdater.logger = log
   autoUpdater.logger.transports.file.level = 'info'
 
@@ -34,9 +39,6 @@ function init(autoUpdater, sendStatusToWindow) {
       autoUpdater.quitAndInstall()  
     }, 5000)
   })
-}
 
-exports.run = function run(autoUpdater, sendStatusToWindow) {
-  init(autoUpdater, sendStatusToWindow)
   autoUpdater.checkForUpdates()
 }
