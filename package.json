@@ -1,11 +1,11 @@
 {
   "name": "edoc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "eDoc lines clients",
   "main": "main.js",
   "scripts": {
     "pack": "electron-builder --dir",
-    "start": "electron ./app",
+    "start": "electron .",
     "dist:win": "electron-builder --windows --x64"
   },
   "author": "eDoc Saude <contato@edocsaude.com>",

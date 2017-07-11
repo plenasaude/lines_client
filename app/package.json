@@ -1,9 +1,0 @@
-{
-  "name": "edoc",
-  "version": "0.0.2",
-  "description": "eDoc lines clients",
-  "main": "main.js",
-  "keywords": [],
-  "author": "eDoc Saude <contato@edocsaude.com>",
-  "license": "ISC"
-}
