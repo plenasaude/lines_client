@@ -1,12 +1,8 @@
 {
   "name": "edoc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "eDoc lines clients",
   "main": "main.js",
-  "scripts": {
-    "build": "npm install && electron-packager . eDoc --platform win32 --arch x64",
-    "start": "electron ."
-  },
   "keywords": [],
   "author": "eDoc Saude <contato@edocsaude.com>",
   "license": "ISC"
