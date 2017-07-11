@@ -5,3 +5,4 @@ eDoc-*
 *.zip
 *.log
 *.swp
+.env

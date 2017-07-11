@@ -9,9 +9,19 @@
   },
   "author": "eDoc Saude <contato@edocsaude.com>",
   "build": {
-    "appId": "com.electron.edoc",
+    "appId": "com.github.edocsaude.edoc",
     "productName": "eDoc",
-    "compression": "store"
+    "compression": "store",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "edocsaude",
+        "repo": "lines_clients_test"
+      }
+    ],
+    "nsis": {
+      "perMachine": true
+    }
   },
   "devDependencies": {
     "electron": "^1.6.11",
@@ -19,6 +29,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "electron-log": "^2.2.7",
     "electron-updater": "^2.4.5"
   }
 }
