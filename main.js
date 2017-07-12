@@ -62,7 +62,6 @@ electron.app.on('ready', function()  {
 })
 
 electron.ipcMain.on('print-ticket', (event, ticket) => {
-  console.log(ticket)
   const passwordWindow = new electron.BrowserWindow({
     show: false,
     width: 200,
@@ -74,6 +73,10 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
     protocol: 'file',
     slashes: true,
   }))
+
+  passwordWindow.webContents.on('did-finish-load', () => {
+    passwordWindow.webContents.send('ticket', ticket)
+  })
 
   passwordWindow.once('ready-to-show', () => {
     //passwordWindow.webContents.print({ silent: true })
