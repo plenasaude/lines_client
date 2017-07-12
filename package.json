@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "bootstrap": "^3.3.7",
     "electron-log": "^2.2.7",
     "electron-updater": "^2.4.5"
   }
