@@ -3,9 +3,9 @@
 
 ## Requisitos em comum para todos os clientes
 
-Os clientes devem ser entregues na forma de executável, preferencialmente com capacidade de 'over the wire update', para facilitar manutenção. Deve ser possível gerar executáveis para Windows e Linux.
+[x] Os clientes devem ser entregues na forma de executável, preferencialmente com capacidade de 'over the wire update', para facilitar manutenção. Deve ser possível gerar executáveis para Windows e Linux.
 
-Ao iniciar a aplicação, ela deve ler o arquivo edoc_config.json no diretório root do usuário atual. O arquivo de configuração deve ter o seguinte formato:
+[x] Ao iniciar a aplicação, ela deve ler o arquivo edoc_config.json no diretório root do usuário atual. O arquivo de configuração deve ter o seguinte formato:
 
 ```javascript
 {
