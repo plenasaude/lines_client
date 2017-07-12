@@ -43,7 +43,7 @@ function createWindow() {
     .then(loadApplication)
     .catch(() => loadErrorView('Configurações da tela não encontradas'))
 
-  //win.setKiosk(true)
+  if (!isDev) win.setKiosk(true)
 
   // Open the DevTools
   win.webContents.openDevTools()
