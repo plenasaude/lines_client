@@ -29,10 +29,9 @@ function loadErrorView(errorMessage) {
     slashes: true,
   }))
 
-  setTimeout(() => {
-    console.log(errorMessage)
+  win.webContents.on('did-finish-load', () => {
     win.webContents.send('data', { message: errorMessage })
-  }, 1000)
+  })
 }
 
 function createWindow() {
