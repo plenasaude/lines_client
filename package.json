@@ -34,6 +34,7 @@
     "bootstrap": "^3.3.7",
     "electron-log": "^2.2.7",
     "electron-updater": "^2.4.5",
+    "ramda": "^0.24.1",
     "sweetalert2": "^6.6.6"
   }
 }
