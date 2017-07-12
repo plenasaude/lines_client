@@ -11,3 +11,16 @@
 .modal-content {
   padding: 10%;
 }
+
+.totem-bnt {
+  height: 30%;
+  text-align: center;
+}
+
+.line-big {
+  padding: 3%;
+}
+
+.line-small {
+  padding: 15%;
+}

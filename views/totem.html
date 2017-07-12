@@ -1,14 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%;">
   <head>
-    <script src="totem.js"></script>
+    <script src="../src/totem.js"></script>
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="edoc.css">
+    <link rel="stylesheet" href="../node_modules/sweetalert2/dist/sweetalert2.css"></script>
     <meta charset="UTF-8">
     <title>Fila</title>
   </head>
 
-  <body>
-    <button id="normal_queue">Normal</button>
-    <button id="preferencial_queue">Preferencial</button>
+  <body class="full-height modal-content">
+    <div class="row full-height">
+      <div class="col-xs-6 full-height">
+        <div
+          id="normal_queue"
+          class="alert alert-info vertical-align totem-btn"
+          role="alert"
+        >
+          <span>Normal</span>
+        </div>
+      </div>
+
+      <div class="col-xs-6 full-height">
+        <div
+          id="preferencial_queue"
+          class="alert alert-info vertical-align"
+          role="alert"
+        >
+          Preferencial
+        </div>
+      </div>
+    </div>
   </body>
 
 </html>

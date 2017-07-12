@@ -1,13 +1,11 @@
-const { app, BrowserWindow } = require('electron')
+const electron = require('electron')
 const log = require('electron-log')
 const { autoUpdater } = require("electron-updater")
-
 const path = require('path')
 const url = require('url')
 
 const isDev = require('./src/is_dev')
 const autoupdate = require('./src/autoupdate')
-
 const getConfig = require('./src/get_configuration')
 
 log.info('App starting...')
@@ -39,7 +37,7 @@ function loadErrorView(errorMessage) {
 
 function createWindow() {
   // create the browser window
-  win = new BrowserWindow({ width: 800, height: 800 })
+  win = new electron.BrowserWindow({ width: 800, height: 800 })
 
   // and load the index.html of the app
   getConfig()
@@ -55,10 +53,32 @@ function createWindow() {
   win.on('close', () => { win = null })
 }
 
-app.on('ready', createWindow)
+electron.app.on('ready', createWindow)
 
-app.on('window-all-closed', () => app.quit())
+electron.app.on('window-all-closed', () => electron.app.quit())
 
-app.on('ready', function()  {
+electron.app.on('ready', function()  {
   if (!isDev) autoupdate.run(autoUpdater, win, log)
+})
+
+electron.ipcMain.on('print-ticket', (event, ticket) => {
+  console.log(ticket)
+  const passwordWindow = new electron.BrowserWindow({
+    show: false,
+    width: 200,
+    height: 300,
+  })
+
+  passwordWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'views', 'print.html'),
+    protocol: 'file',
+    slashes: true,
+  }))
+
+  passwordWindow.once('ready-to-show', () => {
+    //passwordWindow.webContents.print({ silent: true })
+    passwordWindow.webContents.print()
+  })
+
+  event.returnValue = true
 })
