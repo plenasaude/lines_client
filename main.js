@@ -63,8 +63,8 @@ electron.app.on('ready', function()  {
 electron.ipcMain.on('print-ticket', (event, ticket) => {
   const passwordWindow = new electron.BrowserWindow({
     show: false,
-    width: 200,
-    height: 300,
+    width: 380,
+    height: 370,
   })
 
   passwordWindow.loadURL(url.format({
