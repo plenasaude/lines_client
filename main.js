@@ -78,8 +78,12 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
   })
 
   passwordWindow.once('ready-to-show', () => {
-    //passwordWindow.webContents.print({ silent: true })
-    passwordWindow.webContents.print()
+    if (isDev) {
+      passwordWindow.show()
+      passwordWindow.webContents.openDevTools()
+    } else {
+      passwordWindow.webContents.print({ silent: true })
+    }
   })
 
   event.returnValue = true
