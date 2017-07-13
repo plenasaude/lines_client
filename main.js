@@ -38,6 +38,8 @@ function createWindow() {
   // create the browser window
   win = new electron.BrowserWindow({ width: 800, height: 800 })
 
+  // TODO: if config not found open a window to enter user, password and store
+  // it in the root directory
   // and load the index.html of the app
   getConfig()
     .then(loadApplication)

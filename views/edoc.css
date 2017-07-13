@@ -26,8 +26,9 @@
   font-size: 8em;
 }
 
-.skip-line-top {
+.skip-line {
   margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 /*TV list*/
