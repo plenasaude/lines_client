@@ -17,6 +17,19 @@
   text-align: center;
 }
 
+.print-text {
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.ticket-number {
+  font-size: 10em;
+}
+
+.skip-line-top {
+  margin-top: 1em;
+}
+
 /*TV list*/
 li {
   list-style: none;
