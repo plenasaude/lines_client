@@ -9,7 +9,7 @@
     "build": "build --win --mac",
     "build:win": "build --win",
     "build:mac": "build --win --mac",
-    "dist:win": "electron-builder --windows --x64"
+    "dist:win": "electron-builder --windows --x64 --ia32"
   },
   "author": "eDoc Saude <contato@edocsaude.com>",
   "build": {
