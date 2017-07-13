@@ -22,7 +22,7 @@ function loadApplication() {
   }))
 }
 
-function loadErrorView(errorMessage) {
+function loadErrorView({ message, payload }) {
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'views', 'error.html'),
     protocol: 'file',
@@ -30,7 +30,7 @@ function loadErrorView(errorMessage) {
   }))
 
   win.webContents.on('did-finish-load', () => {
-    win.webContents.send('data', { message: errorMessage })
+    win.webContents.send('data', { message, payload })
   })
 }
 
@@ -41,7 +41,12 @@ function createWindow() {
   // and load the index.html of the app
   getConfig()
     .then(loadApplication)
-    .catch(() => loadErrorView('Configurações da tela não encontradas'))
+    .catch(location => loadErrorView({
+      message: 'Configurações da tela não encontradas',
+      payload: {
+        configLocation: location,
+      },
+    }))
 
   if (!isDev) win.setKiosk(true)
 
