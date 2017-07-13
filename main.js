@@ -41,11 +41,9 @@ function createWindow() {
   // and load the index.html of the app
   getConfig()
     .then(loadApplication)
-    .catch(location => loadErrorView({
+    .catch(errorPayload => loadErrorView({
       message: 'Configurações da tela não encontradas',
-      payload: {
-        configLocation: location,
-      },
+      payload: errorPayload,
     }))
 
   if (!isDev) win.setKiosk(true)

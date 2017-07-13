@@ -18,5 +18,5 @@ function safeParse(jsonString) {
 
 module.exports = () => readFile(configPath, 'utf8')
   .then(safeParse)
-  .catch(() => Promise.reject(configPath))
+  .catch(error => Promise.reject({ configPath, error }))
 
