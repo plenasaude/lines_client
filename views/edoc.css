@@ -8,13 +8,27 @@
   transform: translateY(-50%);
 }
 
-.modal-content {
-  padding: 10%;
+.padded-10 {
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .totem-bnt {
   height: 30%;
   text-align: center;
+}
+
+.form-box {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  padding-top: 10px;
+}
+
+.form-submit-btn {
+  margin-left: 50%;
+  transform: translateX(-50%);
+  margin-top: 5px;
 }
 
 .print-text {
@@ -29,6 +43,10 @@
 .skip-line {
   margin-top: 1em;
   margin-bottom: 1em;
+}
+
+.hide {
+  display: none;
 }
 
 /*TV list*/

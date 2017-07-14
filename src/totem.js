@@ -2,7 +2,7 @@ const electron = require('electron')
 const swal = require('sweetalert2')
 const R = require('ramda')
 
-const getConfig = electron.remote.require('./src/get_configuration')
+const configuration = electron.remote.require('./src/configuration')
 
 function getTicket(preferred) {
 
@@ -12,7 +12,7 @@ function getTicket(preferred) {
     text: 'Aguarda alguns instantes',
   })
   swal.showLoading()
-  return getConfig()
+  return configuration.get()
     .then(({ user, axios }) =>
       axios.post(`/screen/${user}`, { preferred })
         .then(R.prop('data'))
