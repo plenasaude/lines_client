@@ -1,23 +1,22 @@
-const axios = require('axios')
 const electron = require('electron')
 const swal = require('sweetalert2')
+const R = require('ramda')
+
+const getConfig = electron.remote.require('./src/get_configuration')
 
 function getTicket(preferred) {
+
   const t = { teste: 'teste' }
   swal({
     title: 'Imprimindo senha',
     text: 'Aguarda alguns instantes',
   })
   swal.showLoading()
-  const body = {
-      ticket: '001', // número do ticket
-      queue: 'Taipas primeiro andar', // nome da fila
-      preferred,
-  }
-  //return axios.get('http://google.com')
-    //TODO: remove mock
-    //.then(() => body)
-  return Promise.resolve(body)
+  return getConfig()
+    .then(({ user, axios }) =>
+      axios.post(`/screen/${user}`, { preferred })
+        .then(R.prop('data'))
+    )
     .then(ticket => {
       return electron
       .ipcRenderer
