@@ -14,11 +14,10 @@ body{
   width: 100%;
   height: 100%;
   align-items: center;
+  justify-content: center;
 }
 
 .wrapper-index{
-  width: auto;
-  height: auto;
   color: #fff
 }
 
@@ -37,7 +36,7 @@ body{
 
 .totem-btn{
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 1;
   width: 80%;
   height: 1%;
   align-items: center;
@@ -73,10 +72,11 @@ body{
 }
 
 .totem-btn-sm{
+  flex: 0 1 auto;
+  height: 20%;
   width: 50%;
   text-decoration: none!important;
-  margin-top: 5%;
-  margin-bottom: auto!important
+  margin-bottom: 5%;
 }
 
 .totem-btn-sm:hover{
