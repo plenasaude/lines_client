@@ -70,8 +70,8 @@ const getNewState = R.curry((state, tickets) => R.pipe(
   R.take(oldTicketsMaxSize + newTicketMaxSize)
 )(tickets))
 
-function setState(tickets) {
-   state = getNewState(state, tickets)
+function setState(newState) {
+   state = newState
  }
 
 function refreshQueue() {
