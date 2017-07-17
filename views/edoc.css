@@ -16,6 +16,12 @@ body{
   align-items: center;
 }
 
+.wrapper-index{
+  width: auto;
+  height: auto;
+  color: #fff
+}
+
 .header{
   display: flex;
   order: 1;
@@ -64,6 +70,17 @@ body{
   order: 3;
   background: rgb(59, 166, 216);
   margin-bottom: 7%;
+}
+
+.totem-btn-sm{
+  width: 50%;
+  text-decoration: none!important;
+  margin-top: 5%;
+  margin-bottom: auto!important
+}
+
+.totem-btn-sm:hover{
+  color: inherit;
 }
 
 .form-box {
