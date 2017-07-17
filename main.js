@@ -6,7 +6,7 @@ const url = require('url')
 
 const isDev = require('./src/is_dev')
 const autoupdate = require('./src/autoupdate')
-const getConfig = require('./src/get_configuration')
+const configuration = require('./src/configuration')
 
 log.info('App starting...')
 
@@ -41,7 +41,7 @@ function createWindow() {
   // TODO: if config not found open a window to enter user, password and store
   // it in the root directory
   // and load the index.html of the app
-  getConfig()
+  configuration.get()
     .then(loadApplication)
     .catch(errorPayload => loadErrorView({
       message: 'Configurações da tela não encontradas',
@@ -92,4 +92,9 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
   })
 
   event.returnValue = true
+})
+
+electron.ipcMain.on('save-config', (event, config) => {
+  return configuration.set(config)
+    .then(loadApplication)
 })
