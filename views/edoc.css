@@ -7,6 +7,12 @@ body{
   height: 100%;
 }
 
+.vertical-align {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -14,6 +20,11 @@ body{
   width: 100%;
   height: 100%;
   align-items: center;
+  justify-content: center;
+}
+
+.wrapper-index{
+  color: #fff
 }
 
 .header{
@@ -31,7 +42,7 @@ body{
 
 .totem-btn{
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 1;
   width: 80%;
   height: 1%;
   align-items: center;
@@ -66,6 +77,18 @@ body{
   margin-bottom: 7%;
 }
 
+.totem-btn-sm{
+  flex: 0 1 auto;
+  height: 20%;
+  width: 50%;
+  text-decoration: none!important;
+  margin-bottom: 5%;
+}
+
+.totem-btn-sm:hover{
+  color: inherit;
+}
+
 .form-box {
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -77,6 +100,8 @@ body{
   margin-left: 50%;
   transform: translateX(-50%);
   margin-top: 5px;
+  width: auto;
+  height: auto;
 }
 
 .print-text {

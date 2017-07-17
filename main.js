@@ -1,6 +1,6 @@
 const electron = require('electron')
 const log = require('electron-log')
-const { autoUpdater } = require("electron-updater")
+const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const url = require('url')
 
@@ -44,7 +44,7 @@ function createWindow() {
   configuration.get()
     .then(loadApplication)
     .catch(errorPayload => loadErrorView({
-      message: 'Configurações da tela não encontradas',
+      message: 'Configurações não encontradas',
       payload: errorPayload,
     }))
 
@@ -61,7 +61,7 @@ electron.app.on('ready', createWindow)
 
 electron.app.on('window-all-closed', () => electron.app.quit())
 
-electron.app.on('ready', function()  {
+electron.app.on('ready', function () {
   if (!isDev) autoupdate.run(autoUpdater, win, log)
 })
 
@@ -94,7 +94,5 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
   event.returnValue = true
 })
 
-electron.ipcMain.on('save-config', (event, config) => {
-  return configuration.set(config)
-    .then(loadApplication)
-})
+electron.ipcMain.on('save-config', (event, config) => configuration.set(config)
+    .then(loadApplication))
