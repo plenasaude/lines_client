@@ -1,4 +1,7 @@
+const electron = require('electron')
 const R = require('ramda')
+
+const configuration = electron.remote.require('./src/configuration')
 
 function createLine({ ticket, destination, complement }) {
   const line = document.createElement('li')
@@ -29,39 +32,90 @@ const validElements = R.pipe(
   R.filter(c => c.classList.contains('show'))
 )
 
-function scrollListGroup(ticketsArr) {
-  const listMaxSize = 10
-  const validTickets = R.take(listMaxSize, ticketsArr)
+let state = []
+
+const oldTicketsMaxSize = 4
+const newTicketMaxSize = 2
+
+const scrollListGroup = listId => ticketsArr => {
+  const validTickets = R.take(oldTicketsMaxSize, ticketsArr)
   const numberOfNewElements = validTickets.length
 
-  const list = document.getElementById('list')
+  const list = document.getElementById(listId)
   const children = validElements(list)
   const currentListLength = children.length
   const totalElements = (currentListLength + numberOfNewElements)
-  const nElementsToBeRemoved = totalElements > listMaxSize ?
-    totalElements - listMaxSize : 0
+  const nElementsToBeRemoved = totalElements > oldTicketsMaxSize ?
+    totalElements - oldTicketsMaxSize : 0
   const elementsToBeRemoved = R.takeLast(nElementsToBeRemoved, children)
 
   removeElements(elementsToBeRemoved)
   addNewElements(list, validTickets)
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const initial = [
-    { ticket: '001', destination: 'sala 1', complement: 'Pedro C.', lastEdited: 1 },
-    { ticket: '002', destination: 'sala 2', complement: 'Pedro C.', lastEdited: 1 },
-    { ticket: '003', destination: 'sala 2', complement: 'Pedro C.', lastEdited: 1 },
-    { ticket: '003', destination: 'sala 2', complement: 'Pedro C.', lastEdited: 1 },
-    { ticket: '003', destination: 'sala 2', complement: 'Pedro C.', lastEdited: 1 },
-    { ticket: '003', destination: 'sala 2', complement: 'Pedro C.', lastEdited: 1 },
-    { ticket: '003', destination: 'sala 2', complement: 'Pedro C.', lastEdited: 1 },
-  ]
-  scrollListGroup(initial)
+const scrollOldList = scrollListGroup('old-tickets-list')
+const scrollNewList = scrollListGroup('new-tickets-list')
 
-  document.getElementById('add-to-list').onclick = function() {
-    scrollListGroup([
-      { ticket: '001', destination: 'sala 1', complement: 'Pedro C.', lastEdited: 1 },
-      { ticket: '002', destination: 'sala 2', complement: 'Pedro C.', lastEdited: 1 },
-    ])
-  }
+const diffTickets = R.differenceWith(function(t1, t2) {
+  const sameTicket = t1.ticket === t2.ticket
+  const sameCall = t1.lastEditedAt === t2.lastEditedAt
+  return sameTicket && sameCall
+})
+
+const getNewTickets = R.take(newTicketMaxSize)
+const getOldTickets = tickets => R.pipe(
+  diffTickets(R.__, getNewTickets(tickets)),
+  R.take(oldTicketsMaxSize + newTicketMaxSize)
+)(tickets)
+
+const getNewState = R.curry((state, tickets) => R.pipe(
+  diffTickets(R.__, state),
+  R.concat(R.__, state),
+  R.sortBy(R.prop('lastEditedAt')),
+  R.take(oldTicketsMaxSize)
+)(tickets))
+
+function setState(tickets) {
+   state = getNewState(state, tickets)
+ }
+
+function refreshQueue() {
+  return configuration.get()
+    .then(({ user, axios }) =>
+      axios.get(`/screen/${user}?limit=${newTicketMaxSize + oldTicketsMaxSize}`)
+        .then(R.prop('data'))
+    )
+    .then(getNewState(state))
+    .then(newState => {
+      console.log({ newState, state })
+      return newState
+    })
+
+    // .then(tickets => {
+    //   R.pipe(
+    //     // R.tap(console.log),
+    //     getNewTickets,
+    //     // R.tap(console.log),
+    //     diffTickets(R.__, state),
+    //     R.tap(a => console.log({a, tickets, state })),
+    //     scrollNewList
+    //   )(tickets)
+    //
+    //   R.pipe(
+    //     getOldTickets,
+    //     diffTickets(R.__, state),
+    //     scrollOldList
+    //   )(tickets)
+    //
+    //   return tickets
+    // })
+    .then(setState)
+    // .then(() => console.log(state))
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // setInterval(refreshQueue, 1000)
+  // refreshQueue()
+  // refreshQueue()
+  // refreshQueue()
 })
