@@ -9,13 +9,15 @@ function getTicket(preferred) {
     text: 'Aguarda alguns instantes',
   })
   swal.showLoading()
-  return axios.get('http://google.com')
-    //TODO: remove mock
-    .then(() => ({
+  const body = {
       ticket: '001', // número do ticket
       queue: 'Taipas primeiro andar', // nome da fila
       preferred,
-    }))
+  }
+  //return axios.get('http://google.com')
+    //TODO: remove mock
+    //.then(() => body)
+  return Promise.resolve(body)
     .then(ticket => {
       return electron
       .ipcRenderer

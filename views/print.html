@@ -8,13 +8,24 @@
     <title>eDoc</title>
   </head>
 
-  <body class="full-height modal-content">
+  <body class="full-height">
 
-    <div id="ticket-number">
+    <!--TODO: get image from ticket-->
+    <div class="print-text">
+      <img style="width: 10em;" src="../resorces/edoc.png"></img>
     </div>
 
-    <div>
+    <div class="print-text" id="ticket-organization">
+    </div>
+
+    <div class="print-text ticket-number" id="ticket-number">
+    </div>
+
+    <div class="print-text">
       <span id="ticket-queue"></span> - <span id="ticket-preferred"></span>
+    </div>
+
+    <div class="print-text skip-line" id="ticket-date-time">
     </div>
 
   </body>

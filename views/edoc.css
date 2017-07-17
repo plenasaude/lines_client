@@ -72,6 +72,20 @@ box-shadow: inset 0 0 0 1px #27496d,inset 0 5px 30px #193047;
 box-shadow: inset 0 0 0 1px #27496d,inset 0 5px 30px #193047;
 }
 
+.print-text {
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.ticket-number {
+  font-size: 8em;
+}
+
+.skip-line {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
 /*TV list*/
 li {
   list-style: none;

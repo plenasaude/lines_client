@@ -22,7 +22,7 @@ function loadApplication() {
   }))
 }
 
-function loadErrorView(errorMessage) {
+function loadErrorView({ message, payload }) {
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'views', 'error.html'),
     protocol: 'file',
@@ -30,7 +30,7 @@ function loadErrorView(errorMessage) {
   }))
 
   win.webContents.on('did-finish-load', () => {
-    win.webContents.send('data', { message: errorMessage })
+    win.webContents.send('data', { message, payload })
   })
 }
 
@@ -38,10 +38,15 @@ function createWindow() {
   // create the browser window
   win = new electron.BrowserWindow({ width: 800, height: 800 })
 
+  // TODO: if config not found open a window to enter user, password and store
+  // it in the root directory
   // and load the index.html of the app
   getConfig()
     .then(loadApplication)
-    .catch(() => loadErrorView('Configurações da tela não encontradas'))
+    .catch(errorPayload => loadErrorView({
+      message: 'Configurações da tela não encontradas',
+      payload: errorPayload,
+    }))
 
   if (!isDev) win.setKiosk(true)
 
@@ -63,8 +68,8 @@ electron.app.on('ready', function()  {
 electron.ipcMain.on('print-ticket', (event, ticket) => {
   const passwordWindow = new electron.BrowserWindow({
     show: false,
-    width: 200,
-    height: 300,
+    width: 380,
+    height: 370,
   })
 
   passwordWindow.loadURL(url.format({
@@ -78,8 +83,12 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
   })
 
   passwordWindow.once('ready-to-show', () => {
-    //passwordWindow.webContents.print({ silent: true })
-    passwordWindow.webContents.print()
+    if (isDev) {
+      passwordWindow.show()
+      passwordWindow.webContents.openDevTools()
+    } else {
+      passwordWindow.webContents.print({ silent: true })
+    }
   })
 
   event.returnValue = true
