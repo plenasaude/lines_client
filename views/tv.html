@@ -10,63 +10,78 @@
 
   <body id="body-tv" class="full-height" style="background-image:url(logo.png)">
 
-    <!-- <h1>New list</h1>
-    <ul id="new-tickets-list" class="fade" style="opacity: 1;">
-    </ul>
-
-    <h1>Old list</h1>
-    <ul id="old-tickets-list" class="fade" style="opacity: 1;">
-    </ul> -->
-  <div class="wrapper wrapper-tv">
-
-    <ul id="new-tickets-list" class="box fade" style="opacity: 1;">
-      <!-- Removed show class, check if its necessary -->
-      <li class="new box-new">
-        <span class="box-text">Senha</span>
-        <span class="ticket-room"id="ticket">001</span>
-        <span class="box-text">Local</span>
-        <span class="ticket-room" id="destination">Sala 01</span>
-      </li>
-      <!-- Removed show class, check if its necessary -->
-      <li class="new box-new">
-        <span class="box-text">Senha</span>
-        <span class="ticket-room" id="ticket">002</span>
-        <span class="box-text">Local</span>
-        <span class="ticket-room" id="destination">Triagem 01</span>
-      </li>
+    <!-- <ul id="new-tickets-list" class="box fade" style="opacity: 1;">
     </ul>
 
     <ul id="old-tickets-list" class="box big-box-old fade" style="opacity: 1;">
-      <!-- Removed show class, check if its necessary -->
-      <li class="new box-new box-old">
-        <span class="box-text box-text-last">ÚLTIMAS CHAMADAS:</span>
-      </li>
-      <li class="new box-new box-old">
-        <span class="ticket-room ticket-room-last" id="ticket">001</span>
-        <span class="ticket-room ticket-room-last" id="destination">Sala 01</span>
-      </li>
-      <!-- Removed show class, check if its necessary -->
-      <li class="new box-new box-old">
-        <span class="ticket-room ticket-room-last" id="ticket">002</span>
-        <span class="ticket-room ticket-room-last" id="destination">Sala 02</span>
-      </li>
-      <li class="new box-new box-old">
-        <span class="ticket-room ticket-room-last" id="ticket">003</span>
-        <span class="ticket-room ticket-room-last" id="destination">Sala 03</span>
-      </li>
-      <li class="new box-new box-old">
-        <span class="ticket-room ticket-room-last" id="ticket">004</span>
-        <span class="ticket-room ticket-room-last" id="destination">Sala 04</span>
-      </li>
-      <li class="new box-new box-old">
-        <span class="ticket-room ticket-room-last" id="ticket">005</span>
-        <span class="ticket-room ticket-room-last" id="destination">Sala 05</span>
-      </li>
-      <li class="new box-new box-old">
-        <span class="ticket-room ticket-room-last" id="ticket">006</span>
-        <span class="ticket-room ticket-room-last" id="destination">Sala 06</span>
-      </li>
-    </ul>
+    </ul> -->
+
+  <div id="tv-workspace" class="tv-flex-wrapper">
+
+    <div class="tv-col" style="flex-grow: 2;">
+      <ul id="new-tickets-list" class="box fade" style="opacity: 1;">
+        <li class="ticket show">
+          <span class="boxed-text">Senha</span>
+          <span class="ticket-data" id="ticket">001</span>
+          <span class="boxed-text">Local</span>
+          <span class="ticket-data" id="destination">Sala 01</span>
+        </li>
+        <li class="ticket show">
+          <span class="boxed-text">Senha</span>
+          <span class="ticket-data" id="ticket">002</span>
+          <span class="boxed-text">Local</span>
+          <span class="ticket-data" id="destination">Triagem 01</span>
+        </li>
+      </ul>
+    </div>
+
+
+    <div class="tv-col called" style="flex-grow: 1;">
+      <div>
+        ÚLTIMAS CHAMADAS:
+      </div>
+
+      <div>
+        <ul id="old-tickets-list" class="box fade" style="opacity: 1;">
+          <li class="ticket show">
+            <span class="boxed-text label">Senha</span>
+            <span class="ticket-data" id="ticket">001</span>
+            <span class="boxed-text label">Local</span>
+            <span class="ticket-data" id="destination">Sala 01</span>
+          </li>
+          <li class="ticket show">
+            <span class="boxed-text label">Senha</span>
+            <span class="ticket-data" id="ticket">002</span>
+            <span class="boxed-text label">Local</span>
+            <span class="ticket-data" id="destination">Sala 02</span>
+          </li>
+          <li class="ticket show">
+            <span class="boxed-text label">Senha</span>
+            <span class="ticket-data" id="ticket">003</span>
+            <span class="boxed-text label">Local</span>
+            <span class="ticket-data" id="destination">Sala 03</span>
+          </li>
+          <li class="ticket show">
+            <span class="boxed-text label">Senha</span>
+            <span class="ticket-data" id="ticket">004</span>
+            <span class="boxed-text label">Local</span>
+            <span class="ticket-data" id="destination">Sala 04</span>
+          </li>
+          <li class="ticket show">
+            <span class="boxed-text label">Senha</span>
+            <span class="ticket-data" id="ticket">005</span>
+            <span class="boxed-text label">Local</span>
+            <span class="ticket-data" id="destination">Sala 05</span>
+          </li>
+          <li class="ticket show">
+            <span class="boxed-text label">Senha</span>
+            <span class="ticket-data" id="ticket">006</span>
+            <span class="boxed-text label">Local</span>
+            <span class="ticket-data" id="destination">Sala 06</span>
+          </li>
+        </ul>
+      </div>
+    </div>
 
   </div>
 
