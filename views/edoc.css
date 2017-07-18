@@ -126,17 +126,24 @@ body{
 #body-tv{
   background-repeat: no-repeat;
   background-position: top left;
+  font-size: 40px;
+  color: #fff;
+  text-align: center;
 }
 
 #tv-workspace {
   padding-top: 90px;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 .boxed-text{
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
-  font-size: 40px;
+  font-size: 60px;
   font-weight: bold;
 }
 
@@ -152,47 +159,63 @@ body{
 
 .tv-col {
   display: flex;
-  height: 100%;
   flex-flow: column wrap;
-  justify-content: center;
-  align-items: center;
+  height: 100%;
   overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  margin-left: 15px;
 }
 
 .tv-col.called {
-  flex-grow: 3;
   justify-content: flex-start;
   flex-wrap: nowrap;
+  background-color: rgb(26, 96, 182);
+  border-radius: 15px;
+  border: 7px solid rgba(80, 76, 76, 0.86);
+  margin-right: 15px;
+  margin-left: 0;
 }
 
 .box {
-  padding-left: 0;
-  flex-grow: 1;
-  width: 95%;
+  display: flex!important;
+  flex-wrap: wrap;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  align-content: center;
 }
 
 .ticket-data {
   display: flex;
   background-color: #fff;
   color: rgb(0, 0, 0);
-  font-size: 40px;
+  font-size: 60px;
   font-weight: bold;
   width: 95%;
   justify-content: center;
+  border-radius: 15px;
 }
 
 .ticket {
+  display: flex!important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   background-color: rgb(26, 96, 182);
   height: 0;
   width: 100%;
   margin: 5px;
   border-radius: 15px;
+  overflow: hidden;
 }
 
 .called .box {
-  width: 40%;
+  /*width: 40%;*/
   justify-content: flex-start;
   padding-top: 20px;
+  background-color: rgb(26, 96, 182);
 }
 
 .called .label {
@@ -200,7 +223,8 @@ body{
 }
 
 .called .ticket-data {
-  font-size: 10px;
+  font-size: 40px;
+  border-bottom: 4px solid rgba(80, 76, 76, 0.86);
 }
 
 li {
@@ -217,11 +241,12 @@ li {
 }
 
 .ticket.show {
-  /*height: 20em;*/
-  height: 45%;
+  height: 49%;
+  border: 6px solid rgba(80, 76, 76, 0.86);
 }
 
 .called .fade .ticket.show {
   /*height: 5em;*/
-  height: 45%;
+  height: auto;
+  background: #fff;
 }
