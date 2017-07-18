@@ -8,21 +8,7 @@
     <title>eDoc</title>
   </head>
 
-  <body class="full-height">
-<!--
-    <ul>
-      <li class="show new">
-        <span id="ticket">001</span>
-        <span id="destination">Sala 01</span>
-        <span id="complement">João da Silva</span>
-      </li>
-
-      <li class="show old">
-        <span id="ticket">001</span>
-        <span id="destination">Sala 01</span>
-        <span id="complement">João da Silva</span>
-      </li>
-    </ul> -->
+  <body id="body-tv" class="full-height" style="background-image:url(logo.png)">
 
     <!-- <h1>New list</h1>
     <ul id="new-tickets-list" class="fade" style="opacity: 1;">
@@ -31,37 +17,58 @@
     <h1>Old list</h1>
     <ul id="old-tickets-list" class="fade" style="opacity: 1;">
     </ul> -->
+  <div class="wrapper wrapper-tv">
 
-    <ul id="new-tickets-list" class="fade" style="opacity: 1;">
-      <li class="show new">
-        <span id="ticket">001</span>
-        <span id="destination">Sala 01</span>
+    <ul id="new-tickets-list" class="box fade" style="opacity: 1;">
+      <!-- Removed show class, check if its necessary -->
+      <li class="new box-new">
+        <span class="box-text">Senha</span>
+        <span class="ticket-room"id="ticket">001</span>
+        <span class="box-text">Local</span>
+        <span class="ticket-room" id="destination">Sala 01</span>
       </li>
-
-      <li class="show new">
-        <span id="ticket">001</span>
-        <span id="destination">Sala 01</span>
+      <!-- Removed show class, check if its necessary -->
+      <li class="new box-new">
+        <span class="box-text">Senha</span>
+        <span class="ticket-room" id="ticket">002</span>
+        <span class="box-text">Local</span>
+        <span class="ticket-room" id="destination">Triagem 01</span>
       </li>
     </ul>
 
-    <ul id="old-tickets-list" class="fade" style="opacity: 1;">
-      <li class="show new">
-        <span id="ticket">001</span>
-        <span id="destination">Sala 01</span>
+    <ul id="old-tickets-list" class="box big-box-old fade" style="opacity: 1;">
+      <!-- Removed show class, check if its necessary -->
+      <li class="new box-new box-old">
+        <span class="box-text box-text-last">ÚLTIMAS CHAMADAS:</span>
       </li>
-      <li class="show new">
-        <span id="ticket">001</span>
-        <span id="destination">Sala 01</span>
+      <li class="new box-new box-old">
+        <span class="ticket-room ticket-room-last" id="ticket">001</span>
+        <span class="ticket-room ticket-room-last" id="destination">Sala 01</span>
       </li>
-      <li class="show new">
-        <span id="ticket">001</span>
-        <span id="destination">Sala 01</span>
+      <!-- Removed show class, check if its necessary -->
+      <li class="new box-new box-old">
+        <span class="ticket-room ticket-room-last" id="ticket">002</span>
+        <span class="ticket-room ticket-room-last" id="destination">Sala 02</span>
       </li>
-      <li class="show new">
-        <span id="ticket">001</span>
-        <span id="destination">Sala 01</span>
+      <li class="new box-new box-old">
+        <span class="ticket-room ticket-room-last" id="ticket">003</span>
+        <span class="ticket-room ticket-room-last" id="destination">Sala 03</span>
+      </li>
+      <li class="new box-new box-old">
+        <span class="ticket-room ticket-room-last" id="ticket">004</span>
+        <span class="ticket-room ticket-room-last" id="destination">Sala 04</span>
+      </li>
+      <li class="new box-new box-old">
+        <span class="ticket-room ticket-room-last" id="ticket">005</span>
+        <span class="ticket-room ticket-room-last" id="destination">Sala 05</span>
+      </li>
+      <li class="new box-new box-old">
+        <span class="ticket-room ticket-room-last" id="ticket">006</span>
+        <span class="ticket-room ticket-room-last" id="destination">Sala 06</span>
       </li>
     </ul>
+
+  </div>
 
   </body>
 

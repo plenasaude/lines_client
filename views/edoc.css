@@ -123,7 +123,7 @@ body{
 }
 
 /*TV list*/
-li {
+/*li {
   list-style: none;
   background: #d1703c;
   color: #fff;
@@ -147,4 +147,83 @@ li.show {
 
 .fade li.show {
   opacity: 1;
+}*/
+
+#body-tv{
+  background-repeat: no-repeat;
+  background-position: top left;
+}
+
+.wrapper-tv{
+  flex-direction: row;
+  padding-top: 90px;
+}
+
+.box{
+  display: flex;
+  flex-flow: column wrap;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(61, 219, 186);
+  padding-right: 15px;
+  padding-left: 15px;
+  /*Only for building, remove when finish*/
+  margin-right: 10px;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.ticket-room{
+  display: flex;
+  background-color: #fff;
+  color: rgb(0, 0, 0);
+  font-size: 40px;
+  font-weight: bold;
+  width: 95%;
+  justify-content: center;
+}
+
+.box-new{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  background-color: rgb(26, 96, 182);
+  width: 100%;
+  height: 45%;
+  /*Only for building, remove when finish*/
+  margin: 5px;
+  overflow: hidden;
+  align-items: center;
+  border-radius: 15px;
+  justify-content: center;
+}
+
+.big-box-old{
+  width: 40%;
+  justify-content: flex-start;
+  padding-top: 20px;
+}
+
+.box-old{
+  display: flex;
+  width: 100%;
+  height: auto;
+}
+
+.box-text{
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.box-text-last{
+  font-size: 10px;
+}
+
+.ticket-room-last{
+  height: 90%;
+  font-size: 20px;
+  margin: 5px;
+  border-radius: 15px;
 }
