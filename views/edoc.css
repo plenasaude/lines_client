@@ -133,9 +133,12 @@ body{
 
 #tv-workspace {
   padding-top: 90px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  align-items: center;
 }
 
 .boxed-text{
@@ -153,8 +156,9 @@ body{
   flex-wrap: nowrap;
   width: 100%;
   height: 100%;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  overflow: scroll;
 }
 
 .tv-col {
@@ -164,7 +168,6 @@ body{
   overflow: hidden;
   align-items: center;
   justify-content: center;
-  margin-left: 15px;
 }
 
 .tv-col.called {
@@ -173,18 +176,21 @@ body{
   background-color: rgb(26, 96, 182);
   border-radius: 15px;
   border: 7px solid rgba(80, 76, 76, 0.86);
-  margin-right: 15px;
-  margin-left: 0;
+  margin-left: 15px;
+  /*height: 90%;*/
 }
 
 .box {
   display: flex!important;
+  flex-direction: row;
   flex-wrap: wrap;
   padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  align-content: center;
+  justify-content: space-between;
+  padding-right: 15px;
+  padding-left: 15px;
 }
 
 .ticket-data {
@@ -196,6 +202,7 @@ body{
   width: 95%;
   justify-content: center;
   border-radius: 15px;
+  margin-bottom: 15px;
 }
 
 .ticket {
@@ -204,9 +211,9 @@ body{
   align-items: center;
   justify-content: center;
   background-color: rgb(26, 96, 182);
-  height: 0;
+  height: auto;
   width: 100%;
-  margin: 5px;
+  /*margin: 5px;*/
   border-radius: 15px;
   overflow: hidden;
 }
@@ -214,12 +221,13 @@ body{
 .called .box {
   /*width: 40%;*/
   justify-content: flex-start;
-  padding-top: 20px;
+  /*padding-top: 20px;*/
   background-color: rgb(26, 96, 182);
 }
 
 .called .label {
-    display: none;
+  display: none;
+  color: black;
 }
 
 .called .ticket-data {
@@ -241,12 +249,23 @@ li {
 }
 
 .ticket.show {
-  height: 49%;
+  /*height: 100%;*/
   border: 6px solid rgba(80, 76, 76, 0.86);
+  margin-bottom: 10px;
 }
 
 .called .fade .ticket.show {
   /*height: 5em;*/
   height: auto;
   background: #fff;
+  margin: 5px;
+}
+
+.ticket.show.spacer{
+  background: white;
+  border: 0;
+}
+
+.tv-flex-wrapper.main {
+  align-items: flex-start;
 }
