@@ -10,10 +10,33 @@ const newTicketMaxSize = 2
 
 function createLine({ ticket, destination, complement }) {
   const line = document.createElement('li')
-  line.innerHTML = `${ticket} ${destination} ${complement}`
+  line.classList.add('ticket')
+
+  const ticketLabel = document.createElement('span')
+  ticketLabel.className = 'boxed-text label'
+  ticketLabel.innerHTML = 'Senha'
+
+  const ticketData = document.createElement('span')
+  ticketData.className = 'ticket-data'
+  ticketData.innerHTML = ticket
+
+  const destinationLabel = document.createElement('span')
+  destinationLabel.className = 'boxed-text label'
+  destinationLabel.innerHTML = 'Local'
+
+  const destinationData = document.createElement('span')
+  destinationData.className = 'ticket-data'
+  destinationData.innerHTML = destination
+
+  line.appendChild(ticketLabel)
+  line.appendChild(ticketData)
+  line.appendChild(destinationLabel)
+  line.appendChild(destinationData)
+
   setTimeout(() => {
-    line.className = line.className + " show"
+    line.classList.add('show')
   }, 10)
+
   return line
 }
 
