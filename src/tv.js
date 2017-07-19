@@ -3,6 +3,11 @@ const R = require('ramda')
 
 const configuration = electron.remote.require('./src/configuration')
 
+let state = []
+
+const oldTicketsMaxSize = 4
+const newTicketMaxSize = 2
+
 function createLine({ ticket, destination, complement }) {
   const line = document.createElement('li')
   line.innerHTML = `${ticket} ${destination} ${complement}`
@@ -32,29 +37,24 @@ const validElements = R.pipe(
   R.filter(c => c.classList.contains('show'))
 )
 
-let state = []
-
-const oldTicketsMaxSize = 4
-const newTicketMaxSize = 2
-
-const scrollListGroup = listId => ticketsArr => {
-  const validTickets = R.take(oldTicketsMaxSize, ticketsArr)
+const scrollListGroup = (listId, maxElems) => ticketsArr => {
+  const validTickets = R.take(maxElems, ticketsArr)
   const numberOfNewElements = validTickets.length
 
   const list = document.getElementById(listId)
   const children = validElements(list)
   const currentListLength = children.length
   const totalElements = (currentListLength + numberOfNewElements)
-  const nElementsToBeRemoved = totalElements > oldTicketsMaxSize ?
-    totalElements - oldTicketsMaxSize : 0
+  const nElementsToBeRemoved = totalElements > maxElems ?
+    totalElements - maxElems : 0
   const elementsToBeRemoved = R.takeLast(nElementsToBeRemoved, children)
 
   removeElements(elementsToBeRemoved)
   addNewElements(list, validTickets)
 }
 
-const scrollOldList = scrollListGroup('old-tickets-list')
-const scrollNewList = scrollListGroup('new-tickets-list')
+const scrollOldList = scrollListGroup('old-tickets-list', oldTicketsMaxSize)
+const scrollNewList = scrollListGroup('new-tickets-list', newTicketMaxSize)
 
 const diffTickets = R.differenceWith(function(t1, t2) {
   const sameTicket = t1.ticket === t2.ticket
@@ -62,21 +62,16 @@ const diffTickets = R.differenceWith(function(t1, t2) {
   return sameTicket && sameCall
 })
 
-const getNewTickets = R.take(newTicketMaxSize)
-const getOldTickets = tickets => R.pipe(
-  diffTickets(R.__, getNewTickets(tickets)),
-  R.take(oldTicketsMaxSize + newTicketMaxSize)
-)(tickets)
-
 const getNewState = R.curry((state, tickets) => R.pipe(
   diffTickets(R.__, state),
   R.concat(R.__, state),
   R.sortBy(R.prop('lastEditedAt')),
-  R.take(oldTicketsMaxSize)
+  R.reverse,
+  R.take(oldTicketsMaxSize + newTicketMaxSize)
 )(tickets))
 
-function setState(tickets) {
-   state = getNewState(state, tickets)
+function setState(newState) {
+   state = newState
  }
 
 function refreshQueue() {
@@ -87,35 +82,28 @@ function refreshQueue() {
     )
     .then(getNewState(state))
     .then(newState => {
-      console.log({ newState, state })
+      // Compare and update new list
+      const newHead = R.take(newTicketMaxSize, newState)
+      const oldHead = R.take(newTicketMaxSize, state)
+      R.pipe(
+        diffTickets(newHead),
+        scrollNewList
+      )(oldHead)
       return newState
     })
-
-    // .then(tickets => {
-    //   R.pipe(
-    //     // R.tap(console.log),
-    //     getNewTickets,
-    //     // R.tap(console.log),
-    //     diffTickets(R.__, state),
-    //     R.tap(a => console.log({a, tickets, state })),
-    //     scrollNewList
-    //   )(tickets)
-    //
-    //   R.pipe(
-    //     getOldTickets,
-    //     diffTickets(R.__, state),
-    //     scrollOldList
-    //   )(tickets)
-    //
-    //   return tickets
-    // })
+    .then(newState => {
+      // Compare and update old list
+      const newTail = R.drop(newTicketMaxSize, newState)
+      const oldTail = R.drop(newTicketMaxSize, state)
+      R.pipe(
+        diffTickets(newTail),
+        scrollOldList
+      )(oldTail)
+      return newState
+    })
     .then(setState)
-    // .then(() => console.log(state))
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  // setInterval(refreshQueue, 1000)
-  // refreshQueue()
-  // refreshQueue()
-  // refreshQueue()
+  setInterval(refreshQueue, 1000)
 })
