@@ -2,7 +2,7 @@ const electron = require('electron')
 const swal = require('sweetalert2')
 const R = require('ramda')
 
-const configuration = electron.remote.require('./src/configuration')
+const lineService = electron.remote.require('./src/line_service')
 
 function getTicket(preferred) {
 
@@ -12,11 +12,8 @@ function getTicket(preferred) {
     text: 'Aguarda alguns instantes',
   })
   swal.showLoading()
-  return configuration.get()
-    .then(({ user, axios }) =>
-      axios.post(`/screen/${user}`, { preferred })
-        .then(R.prop('data'))
-    )
+
+  return lineService.createTicket(preferred)
     .then(ticket => {
       return electron
       .ipcRenderer

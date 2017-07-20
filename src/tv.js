@@ -1,7 +1,7 @@
 const electron = require('electron')
 const R = require('ramda')
 
-const configuration = electron.remote.require('./src/configuration')
+const lineService = electron.remote.require('./src/line_service')
 const isDev = electron.remote.require('./src/is_dev')
 
 let state = []
@@ -122,11 +122,8 @@ function setState(newState) {
 }
 
 function fetchNewState() {
-  const url = user => `/screen/${user}?limit=${newTicketMaxSize + oldTicketsMaxSize}`
-  return configuration.get()
-    .then(({ user, axios }) => axios.get(url(user)))
-    .then(R.prop('data'))
-    .then(resetErrorCounter)
+  return lineService.listTickets({ limit: newTicketMaxSize + oldTicketsMaxSize })
+    .then(R.tap(resetErrorCounter))
     .catch(incrementErrorCounter)
 }
 
@@ -159,7 +156,7 @@ const updateView = R.pipe(
 )
 
 const refreshQueue = () => fetchNewState()
-  .then(verifyErrorCount)
+  .then(R.tap(verifyErrorCount))
   .then(updateView)
 
 function mockFactory(n = 1) {

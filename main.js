@@ -8,6 +8,7 @@ const R = require('ramda')
 const isDev = require('./src/is_dev')
 const autoupdate = require('./src/autoupdate')
 const configuration = require('./src/configuration')
+const lineService = require('./src/line_service')
 
 log.info('App starting...')
 
@@ -16,11 +17,14 @@ log.info('App starting...')
 let win
 
 function loadApplication() {
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file',
-    slashes: true,
-  }))
+  return lineService.getLines()
+    .then(() => {
+      win.loadURL(url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file',
+        slashes: true,
+      }))
+    })
 }
 
 function loadErrorView({ message, payload }) {
