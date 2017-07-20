@@ -126,16 +126,16 @@ body{
 #body-tv{
   background-repeat: no-repeat;
   background-position: top left;
-  font-size: 40px;
+  font-size: 3.6vh;
   color: #fff;
   text-align: center;
 }
 
 #tv-workspace {
-  padding-top: 90px;
-  padding-bottom: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-top: 8vh;
+  padding-bottom: 3vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
   height: 100%;
   width: 100%;
   align-items: center;
@@ -146,7 +146,7 @@ body{
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-size: 60px;
+  font-size: 6.5vh;
   font-weight: bold;
 }
 
@@ -197,7 +197,7 @@ body{
   display: flex;
   background-color: #fff;
   color: rgb(0, 0, 0);
-  font-size: 60px;
+  font-size: 6.5vh;
   font-weight: bold;
   width: 95%;
   justify-content: center;
@@ -211,7 +211,7 @@ body{
   align-items: center;
   justify-content: center;
   background-color: rgb(26, 96, 182);
-  height: auto;
+  height: 0;
   width: 100%;
   /*margin: 5px;*/
   border-radius: 15px;
@@ -223,6 +223,7 @@ body{
   justify-content: flex-start;
   /*padding-top: 20px;*/
   background-color: rgb(26, 96, 182);
+  align-content: flex-start;
 }
 
 .called .label {
@@ -231,7 +232,7 @@ body{
 }
 
 .called .ticket-data {
-  font-size: 40px;
+  font-size: 3.71vh;
   border-bottom: 4px solid rgba(80, 76, 76, 0.86);
 }
 
@@ -242,7 +243,16 @@ li {
 .fade li {
   -webkit-transition: all 0.4s ease-out;
   opacity: 0;
+  /*height: 12em;*/
 }
+
+/*@media only screen
+  and (min-width: 721px)
+  and (min-width: 1920px){*/
+  .fade .ticket.show{
+    height: 44vh;
+  }
+
 
 .fade li.show {
   opacity: 1;
@@ -250,20 +260,15 @@ li {
 
 .ticket.show {
   /*height: 100%;*/
-  border: 6px solid rgba(80, 76, 76, 0.86);
-  margin-bottom: 10px;
+  border: 0.3vw solid rgba(80, 76, 76, 0.86);
+  margin-bottom: 1vh;
 }
 
 .called .fade .ticket.show {
   /*height: 5em;*/
-  height: auto;
+  height: 5.3em;
   background: #fff;
   margin: 5px;
-}
-
-.ticket.show.spacer{
-  background: white;
-  border: 0;
 }
 
 .tv-flex-wrapper.main {
