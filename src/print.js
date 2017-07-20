@@ -12,8 +12,8 @@ electron.ipcRenderer.on('ticket', (e, ticket) => {
   document.getElementById('ticket-date-time').innerHTML =
     moment(date).format('DD/MM/YYYY - HH:mm')
 
-  if (ticket.organization) {
-    document.getElementById('ticket-organization').innerHTML = ticket.organization
+  if (ticket.text) {
+    document.getElementById('ticket-organization').innerHTML = ticket.text
   } else {
     document.getElementById('ticket-organization').style.display = 'none'
   }

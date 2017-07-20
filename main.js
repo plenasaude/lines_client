@@ -84,10 +84,9 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
   }))
 
   passwordWindow.webContents.on('did-finish-load', () => {
-    const lineId = R.path(['queue', 'id'], ticket)
     passwordWindow.webContents.send('ticket', R.merge(ticket, {
-      organization: screens.organization(lineId),
-      logo: screens.logo(lineId),
+      text: screens.text(),
+      logo: screens.logo(),
     }))
   })
 
