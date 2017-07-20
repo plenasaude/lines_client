@@ -7,8 +7,24 @@ const isDev = electron.remote.require('./src/is_dev')
 let state = []
 
 let errorCnt = 0
+let intervalHandler = null
 const incrementErrorCounter = () => { errorCnt += 1 }
 const resetErrorCounter = () => { errorCnt = 0 }
+function verifyErrorCount() {
+  if (errorCnt > 30) {
+    console.log('ERROR count exceded maximum allowed')
+    if (intervalHandler) clearInterval(intervalHandler)
+
+    // TODO: change this to another key, we may want to test internet connection
+    //in dev
+    if (!isDev) {
+      electron.ipcRenderer.send('application-error', {
+        message: 'Sem acesso a internet',
+        payload: { showLogin: false },
+      })
+    }
+  }
+}
 
 const oldTicketsMaxSize = 4
 const newTicketMaxSize = 2
@@ -142,7 +158,9 @@ const updateView = R.pipe(
   setState
 )
 
-const refreshQueue = () => fetchNewState().then(updateView)
+const refreshQueue = () => fetchNewState()
+  .then(verifyErrorCount)
+  .then(updateView)
 
 function mockFactory(n = 1) {
   let cnt = 0
@@ -173,9 +191,7 @@ function mockFactory(n = 1) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  setInterval(() => {
-    refreshQueue()
-  }, 1000)
+  intervalHandler = setInterval(refreshQueue, 1000)
 
   if (isDev) {
     const mock = mockFactory(1)

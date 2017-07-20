@@ -1,8 +1,11 @@
 const electron = require('electron')
+const R = require('ramda')
 
 electron.ipcRenderer.on('data', (event, data) => {
-  console.log(data.payload)
   document.getElementById('errorMessage').innerHTML = data.message
+  const showLogin = R.path(['payload', 'showLogin'], data)
+  if (showLogin) document.getElementById('error-login-form').style.display = 'block'
+  else document.getElementById('error-login-form').style.display = 'none'
 })
 
 document.addEventListener('DOMContentLoaded', function() {

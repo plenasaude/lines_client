@@ -3,6 +3,7 @@ const log = require('electron-log')
 const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const url = require('url')
+const R = require('ramda')
 
 const isDev = require('./src/is_dev')
 const autoupdate = require('./src/autoupdate')
@@ -45,7 +46,7 @@ function createWindow() {
     .then(loadApplication)
     .catch(errorPayload => loadErrorView({
       message: 'Configurações não encontradas',
-      payload: errorPayload,
+      payload: R.merge(errorPayload, { showLogin: true }),
     }))
 
   if (!isDev) win.setKiosk(true)
@@ -96,3 +97,7 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
 
 electron.ipcMain.on('save-config', (event, config) => configuration.set(config)
     .then(loadApplication))
+
+electron.ipcMain.on('application-error', (event, error) => {
+  loadErrorView(error)
+})
