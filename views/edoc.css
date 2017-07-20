@@ -132,13 +132,30 @@ body{
 }
 
 #tv-workspace {
-  padding-top: 8vh;
+  padding-top: 3vh;
   padding-bottom: 3vh;
   padding-left: 1vw;
   padding-right: 1vw;
   height: 100%;
   width: 100%;
   align-items: center;
+}
+
+.screen-header {
+  height: 10vh;
+  width: 100%;
+}
+
+.screen-body {
+  height: 90vh;
+}
+
+.screen-header img {
+  width: auto;
+  height: inherit;
+  float: left;
+  padding-left: 4vw;
+  padding-top: 2vh;
 }
 
 .boxed-text{

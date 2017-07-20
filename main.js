@@ -70,6 +70,10 @@ electron.app.on('ready', function () {
   if (!isDev) autoupdate.run(autoUpdater, win, log)
 })
 
+electron.ipcMain.on('get-logo', event => {
+  event.sender.send('logo', screens.logo())
+})
+
 electron.ipcMain.on('print-ticket', (event, ticket) => {
   const passwordWindow = new electron.BrowserWindow({
     show: false,
