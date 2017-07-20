@@ -10,10 +10,33 @@ const newTicketMaxSize = 2
 
 function createLine({ ticket, destination, complement }) {
   const line = document.createElement('li')
-  line.innerHTML = `${ticket} ${destination} ${complement}`
+  line.classList.add('ticket')
+
+  const ticketLabel = document.createElement('span')
+  ticketLabel.className = 'boxed-text label'
+  ticketLabel.innerHTML = 'Senha'
+
+  const ticketData = document.createElement('span')
+  ticketData.className = 'ticket-data'
+  ticketData.innerHTML = ticket
+
+  const destinationLabel = document.createElement('span')
+  destinationLabel.className = 'boxed-text label'
+  destinationLabel.innerHTML = 'Local'
+
+  const destinationData = document.createElement('span')
+  destinationData.className = 'ticket-data'
+  destinationData.innerHTML = destination
+
+  line.appendChild(ticketLabel)
+  line.appendChild(ticketData)
+  line.appendChild(destinationLabel)
+  line.appendChild(destinationData)
+
   setTimeout(() => {
-    line.className = line.className + " show"
+    line.classList.add('show')
   }, 10)
+
   return line
 }
 
@@ -56,6 +79,12 @@ const scrollListGroup = (listId, maxElems) => ticketsArr => {
 const scrollOldList = scrollListGroup('old-tickets-list', oldTicketsMaxSize)
 const scrollNewList = scrollListGroup('new-tickets-list', newTicketMaxSize)
 
+function beep() {
+  const beep = new Audio("../resorces/tv_beep.mp3")
+  beep.loop = false
+  beep.play()
+}
+
 const diffTickets = R.differenceWith(function(t1, t2) {
   const sameTicket = t1.ticket === t2.ticket
   const sameCall = t1.lastEditedAt === t2.lastEditedAt
@@ -87,7 +116,8 @@ function refreshQueue() {
       const oldHead = R.take(newTicketMaxSize, state)
       R.pipe(
         diffTickets(newHead),
-        scrollNewList
+        R.unless(R.isEmpty, R.tap(beep)),
+        R.unless(R.isEmpty, scrollNewList)
       )(oldHead)
       return newState
     })
@@ -97,7 +127,7 @@ function refreshQueue() {
       const oldTail = R.drop(newTicketMaxSize, state)
       R.pipe(
         diffTickets(newTail),
-        scrollOldList
+        R.unless(R.isEmpty, scrollOldList)
       )(oldTail)
       return newState
     })
