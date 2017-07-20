@@ -79,6 +79,12 @@ const scrollListGroup = (listId, maxElems) => ticketsArr => {
 const scrollOldList = scrollListGroup('old-tickets-list', oldTicketsMaxSize)
 const scrollNewList = scrollListGroup('new-tickets-list', newTicketMaxSize)
 
+function beep() {
+  const beep = new Audio("../resorces/tv_beep.mp3")
+  beep.loop = false
+  beep.play()
+}
+
 const diffTickets = R.differenceWith(function(t1, t2) {
   const sameTicket = t1.ticket === t2.ticket
   const sameCall = t1.lastEditedAt === t2.lastEditedAt
@@ -110,7 +116,8 @@ function refreshQueue() {
       const oldHead = R.take(newTicketMaxSize, state)
       R.pipe(
         diffTickets(newHead),
-        scrollNewList
+        R.unless(R.isEmpty, R.tap(beep)),
+        R.unless(R.isEmpty, scrollNewList)
       )(oldHead)
       return newState
     })
@@ -120,7 +127,7 @@ function refreshQueue() {
       const oldTail = R.drop(newTicketMaxSize, state)
       R.pipe(
         diffTickets(newTail),
-        scrollOldList
+        R.unless(R.isEmpty, scrollOldList)
       )(oldTail)
       return newState
     })
