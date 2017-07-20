@@ -12,7 +12,15 @@ electron.ipcRenderer.on('ticket', (e, ticket) => {
   document.getElementById('ticket-date-time').innerHTML =
     moment(date).format('DD/MM/YYYY - HH:mm')
 
-  // TODO: get from ticket
-  document.getElementById('ticket-organization').innerHTML =
-    'Previna taipas'
+  if (ticket.organization) {
+    document.getElementById('ticket-organization').innerHTML = ticket.organization
+  } else {
+    document.getElementById('ticket-organization').style.display = 'none'
+  }
+
+  if (ticket.logo) {
+    document.getElementById('ticket-logo').src = ticket.logo
+  } else {
+    document.getElementById('ticket-logo').style.display = 'none'
+  }
 })

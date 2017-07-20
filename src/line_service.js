@@ -10,8 +10,8 @@ function http(fn) {
   )
 }
 
-exports.getLines = function getLines() {
-  const url = user => `/screen/${user}/lines`
+exports.getScreenConfig = function getScreenConfig() {
+  const url = user => `/screen/${user}/config`
   return http(({ user, axios }) => axios.get(url(user)))
 }
 

@@ -8,7 +8,7 @@ const R = require('ramda')
 const isDev = require('./src/is_dev')
 const autoupdate = require('./src/autoupdate')
 const configuration = require('./src/configuration')
-const lineService = require('./src/line_service')
+const screens = require('./src/screens')
 
 log.info('App starting...')
 
@@ -17,7 +17,7 @@ log.info('App starting...')
 let win
 
 function loadApplication() {
-  return lineService.getLines()
+  return screens.start()
     .then(() => {
       win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
@@ -84,7 +84,11 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
   }))
 
   passwordWindow.webContents.on('did-finish-load', () => {
-    passwordWindow.webContents.send('ticket', ticket)
+    const lineId = R.path(['queue', 'id'], ticket)
+    passwordWindow.webContents.send('ticket', R.merge(ticket, {
+      organization: screens.organization(lineId),
+      logo: screens.logo(lineId),
+    }))
   })
 
   passwordWindow.once('ready-to-show', () => {
