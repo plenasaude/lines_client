@@ -2,8 +2,13 @@ const electron = require('electron')
 const R = require('ramda')
 
 const configuration = electron.remote.require('./src/configuration')
+const isDev = electron.remote.require('./src/is_dev')
 
 let state = []
+
+let errorCnt = 0
+const incrementErrorCounter = () => { errorCnt += 1 }
+const resetErrorCounter = () => { errorCnt = 0 }
 
 const oldTicketsMaxSize = 4
 const newTicketMaxSize = 2
@@ -69,15 +74,12 @@ const scrollListGroup = (listId, maxElems) => ticketsArr => {
   const currentListLength = children.length
   const totalElements = (currentListLength + numberOfNewElements)
   const nElementsToBeRemoved = totalElements > maxElems ?
-    totalElements - maxElems : 0
+  totalElements - maxElems : 0
   const elementsToBeRemoved = R.takeLast(nElementsToBeRemoved, children)
 
   removeElements(elementsToBeRemoved)
   addNewElements(list, validTickets)
 }
-
-const scrollOldList = scrollListGroup('old-tickets-list', oldTicketsMaxSize)
-const scrollNewList = scrollListGroup('new-tickets-list', newTicketMaxSize)
 
 function beep() {
   const beep = new Audio("../resorces/tv_beep.mp3")
@@ -100,40 +102,84 @@ const getNewState = R.curry((state, tickets) => R.pipe(
 )(tickets))
 
 function setState(newState) {
-   state = newState
- }
+  state = newState
+}
 
-function refreshQueue() {
+function fetchNewState() {
+  const url = user => `/screen/${user}?limit=${newTicketMaxSize + oldTicketsMaxSize}`
   return configuration.get()
-    .then(({ user, axios }) =>
-      axios.get(`/screen/${user}?limit=${newTicketMaxSize + oldTicketsMaxSize}`)
-        .then(R.prop('data'))
-    )
-    .then(getNewState(state))
-    .then(newState => {
-      // Compare and update new list
-      const newHead = R.take(newTicketMaxSize, newState)
-      const oldHead = R.take(newTicketMaxSize, state)
-      R.pipe(
-        diffTickets(newHead),
-        R.unless(R.isEmpty, R.tap(beep)),
-        R.unless(R.isEmpty, scrollNewList)
-      )(oldHead)
-      return newState
-    })
-    .then(newState => {
-      // Compare and update old list
-      const newTail = R.drop(newTicketMaxSize, newState)
-      const oldTail = R.drop(newTicketMaxSize, state)
-      R.pipe(
-        diffTickets(newTail),
-        R.unless(R.isEmpty, scrollOldList)
-      )(oldTail)
-      return newState
-    })
-    .then(setState)
+    .then(({ user, axios }) => axios.get(url(user)))
+    .then(R.prop('data'))
+    .then(resetErrorCounter)
+    .catch(incrementErrorCounter)
+}
+
+function updateNewList(newState) {
+  const scrollNewList = scrollListGroup('new-tickets-list', newTicketMaxSize)
+  const newHead = R.take(newTicketMaxSize, newState)
+  const oldHead = R.take(newTicketMaxSize, state)
+  return R.pipe(
+    diffTickets(newHead),
+    R.unless(R.isEmpty, R.tap(beep)),
+    R.unless(R.isEmpty, scrollNewList)
+  )(oldHead)
+}
+
+function updateOldList(newState) {
+  const scrollOldList = scrollListGroup('old-tickets-list', oldTicketsMaxSize)
+  const newTail = R.drop(newTicketMaxSize, newState)
+  const oldTail = R.drop(newTicketMaxSize, state)
+  return R.pipe(
+    diffTickets(newTail),
+    R.unless(R.isEmpty, scrollOldList)
+  )(oldTail)
+}
+
+const updateView = R.pipe(
+  getNewState(state),
+  R.tap(updateNewList),
+  R.tap(updateOldList),
+  setState
+)
+
+const refreshQueue = () => fetchNewState().then(updateView)
+
+function mockFactory(n = 1) {
+  let cnt = 0
+  function createMockResponse() {
+    return {
+      ticket: cnt++,
+      createdAt: Date.now(),
+      destination: 'giche',
+      lastEditedAt: Date.now(),
+      preferred: false,
+      queue: {
+        id: '596cd441d255b2d0a2ab4c40',
+        name: 'queue name',
+        payload: {},
+      },
+    }
+  }
+
+  return function newTickets(mock) {
+    return R.pipe(
+      R.times(createMockResponse),
+      R.concat(mock),
+      R.sortBy(R.prop('lastEditedAt')),
+      R.reverse,
+      R.take(newTicketMaxSize + oldTicketsMaxSize)
+    )(n)
+  }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  setInterval(refreshQueue, 1000)
+  setInterval(() => {
+    refreshQueue()
+  }, 1000)
+
+  if (isDev) {
+    const mock = mockFactory(1)
+    document.getElementById('last-calls-title')
+      .addEventListener('click', () => updateView(mock(state)))
+  }
 })
