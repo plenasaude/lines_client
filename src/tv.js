@@ -98,7 +98,7 @@ const scrollListGroup = (listId, maxElems) => ticketsArr => {
 }
 
 function beep() {
-  const beep = new Audio("../resorces/tv_beep.mp3")
+  const beep = new Audio("../resources/tv_beep.mp3")
   beep.loop = false
   beep.play()
 }
