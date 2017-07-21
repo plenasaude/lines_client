@@ -297,12 +297,15 @@ li {
 
 @keyframes example1 {
  100% {
- transform: translateX(-100%);
+   transform: translateX(-100%);
+ }
+
+ 0% {
+   transform: translateX(100%);
  }
 }
 
 .scrolling-text{
-  transform: translateX(100%);
-  animation: example1 5s linear infinite;
-
+  /*transform: translateX(100%);*/
+  animation: example1 5s linear 0s infinite;
 }

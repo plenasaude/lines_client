@@ -88,17 +88,18 @@ function createLine({ ticket, destination, complement }) {
 
   destinationWrapper.appendChild(destinationData)
 
-  const wrapperWidth = destinationWrapper.offsetWidth
-  const destinationWidth = destinationData.offsetWidth
-  console.log({destinationWidth, wrapperWidth})
-
   line.appendChild(ticketLabel)
   line.appendChild(ticketData)
   line.appendChild(destinationLabel)
-  line.appendChild(destinationData)
+  line.appendChild(destinationWrapper)
 
   setTimeout(() => {
     line.classList.add('show')
+    const wrapperWidth = destinationWrapper.offsetWidth
+    const destinationWidth = destinationData.offsetWidth
+    if (wrapperWidth < destinationWidth) {
+      destinationData.classList.add('scrolling-text')
+    }
   }, 10)
 
   return line
