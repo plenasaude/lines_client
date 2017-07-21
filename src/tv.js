@@ -4,13 +4,44 @@ const R = require('ramda')
 const lineService = electron.remote.require('./src/line_service')
 const isDev = electron.remote.require('./src/is_dev')
 
-let state = []
+const oldTicketsMaxSize = 4
+const newTicketMaxSize = 2
 
+function beep() {
+  const beep = new Audio("../resources/tv_beep.mp3")
+  beep.loop = false
+  beep.play()
+}
+
+/******************************************************************************/
+/******************************************************************************/
+// START HANDLE STATE
+const diffTickets = R.differenceWith(function(t1, t2) {
+  const sameTicket = t1.ticket === t2.ticket
+  const sameCall = t1.lastEditedAt === t2.lastEditedAt
+  return sameTicket && sameCall
+})
+
+const getNewState = R.curry((state, tickets) => R.pipe(
+  diffTickets(R.__, state),
+  R.concat(R.__, state),
+  R.sortBy(R.prop('lastEditedAt')),
+  R.reverse,
+  R.take(oldTicketsMaxSize + newTicketMaxSize)
+)(tickets))
+//END HANDLE STATE
+/******************************************************************************/
+/******************************************************************************/
+
+
+/******************************************************************************/
+/******************************************************************************/
+// START ERROR HANDLING
 let errorCnt = 0
-let intervalHandler = null
+
 const incrementErrorCounter = () => { errorCnt += 1 }
 const resetErrorCounter = () => { errorCnt = 0 }
-function verifyErrorCount() {
+const verifyErrorCount = intervalHandler => () => {
   if (errorCnt > 30) {
     console.log('ERROR count exceded maximum allowed')
     if (intervalHandler) clearInterval(intervalHandler)
@@ -25,10 +56,14 @@ function verifyErrorCount() {
     }
   }
 }
+//END ERROR HANDLING
+/******************************************************************************/
+/******************************************************************************/
 
-const oldTicketsMaxSize = 4
-const newTicketMaxSize = 2
 
+/******************************************************************************/
+/******************************************************************************/
+// START DOM MANIPULATION
 function createLine({ ticket, destination, complement }) {
   const line = document.createElement('li')
   line.classList.add('ticket')
@@ -97,37 +132,7 @@ const scrollListGroup = (listId, maxElems) => ticketsArr => {
   addNewElements(list, validTickets)
 }
 
-function beep() {
-  const beep = new Audio("../resources/tv_beep.mp3")
-  beep.loop = false
-  beep.play()
-}
-
-const diffTickets = R.differenceWith(function(t1, t2) {
-  const sameTicket = t1.ticket === t2.ticket
-  const sameCall = t1.lastEditedAt === t2.lastEditedAt
-  return sameTicket && sameCall
-})
-
-const getNewState = R.curry((state, tickets) => R.pipe(
-  diffTickets(R.__, state),
-  R.concat(R.__, state),
-  R.sortBy(R.prop('lastEditedAt')),
-  R.reverse,
-  R.take(oldTicketsMaxSize + newTicketMaxSize)
-)(tickets))
-
-function setState(newState) {
-  state = newState
-}
-
-function fetchNewState() {
-  return lineService.listTickets({ limit: newTicketMaxSize + oldTicketsMaxSize })
-    .then(R.tap(resetErrorCounter))
-    .catch(incrementErrorCounter)
-}
-
-function updateNewList(newState) {
+const updateNewList = state => newState => {
   const scrollNewList = scrollListGroup('new-tickets-list', newTicketMaxSize)
   const newHead = R.take(newTicketMaxSize, newState)
   const oldHead = R.take(newTicketMaxSize, state)
@@ -138,7 +143,7 @@ function updateNewList(newState) {
   )(oldHead)
 }
 
-function updateOldList(newState) {
+const updateOldList = state => newState => {
   const scrollOldList = scrollListGroup('old-tickets-list', oldTicketsMaxSize)
   const newTail = R.drop(newTicketMaxSize, newState)
   const oldTail = R.drop(newTicketMaxSize, state)
@@ -147,17 +152,19 @@ function updateOldList(newState) {
     R.unless(R.isEmpty, scrollOldList)
   )(oldTail)
 }
+//END DOM MANIPULATION
+/******************************************************************************/
+/******************************************************************************/
 
-const updateView = R.pipe(
-  getNewState(state),
-  R.tap(updateNewList),
-  R.tap(updateOldList),
-  setState
-)
 
-const refreshQueue = () => fetchNewState()
-  .then(R.tap(verifyErrorCount))
-  .then(updateView)
+/******************************************************************************/
+/******************************************************************************/
+// START DATA FETCHING
+function fetchNewState() {
+  return lineService.listTickets({ limit: newTicketMaxSize + oldTicketsMaxSize })
+  .then(R.tap(resetErrorCounter))
+  .catch(incrementErrorCounter)
+}
 
 function mockFactory(n = 1) {
   let cnt = 0
@@ -186,23 +193,36 @@ function mockFactory(n = 1) {
     )(n)
   }
 }
-
-electron.ipcRenderer.on('logo', (event, logo) => {
-  if (logo) {
-    document.getElementById('logo-header').src = logo
-  } else {
-    document.getElementById('logo-header').style.display = 'none'
-  }
-})
+//END DATA FETCHING
+/******************************************************************************/
+/******************************************************************************/
 
 document.addEventListener('DOMContentLoaded', function() {
+  electron.ipcRenderer.on('logo', (event, logo) => {
+    if (logo) {
+      document.getElementById('logo-header').src = logo
+    } else {
+      document.getElementById('logo-header').style.display = 'none'
+    }
+  })
+
   electron.ipcRenderer.send('get-logo')
-  
-  intervalHandler = setInterval(refreshQueue, 1000)
+
+  let intervalHandler = null
+  let state = []
+
+  const refreshQueue = fn => () => Promise.resolve(fn())
+    .then(R.tap(verifyErrorCount(intervalHandler)))
+    .then(getNewState(state))
+    .then(R.tap(updateNewList(state)))
+    .then(R.tap(updateOldList(state)))
+    .then(newState => { state = newState })
+
+  intervalHandler = setInterval(refreshQueue(fetchNewState), 1000)
 
   if (isDev) {
     const mock = mockFactory(1)
     document.getElementById('last-calls-title')
-      .addEventListener('click', () => updateView(mock(state)))
+      .addEventListener('click', refreshQueue(() => mock(state)))
   }
 })
