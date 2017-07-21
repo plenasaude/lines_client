@@ -55,9 +55,6 @@ function createWindow() {
 
   if (!isDev) win.setKiosk(true)
 
-  // Open the DevTools
-  win.webContents.openDevTools()
-
   // Emitted when the window is closed
   win.on('close', () => { win = null })
 }
@@ -97,7 +94,6 @@ electron.ipcMain.on('print-ticket', (event, ticket) => {
   passwordWindow.once('ready-to-show', () => {
     if (isDev) {
       passwordWindow.show()
-      passwordWindow.webContents.openDevTools()
     } else {
       passwordWindow.webContents.print({ silent: true })
     }
