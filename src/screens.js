@@ -9,7 +9,7 @@ function formatLogo() {
 
   const imgBase64 = R.test(/^data:image\/png;base64,/, screenConfig.logo) ?
     screenConfig.logo : `data:image/png;base64, ${screenConfig.logo}`
-    
+
   screenConfig.logo = imgBase64
 }
 

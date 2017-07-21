@@ -80,9 +80,17 @@ function createLine({ ticket, destination, complement }) {
   destinationLabel.className = 'boxed-text label'
   destinationLabel.innerHTML = 'Local'
 
+  const destinationWrapper = document.createElement('span')
+  destinationWrapper.className = 'ticket-data'
+
   const destinationData = document.createElement('span')
-  destinationData.className = 'ticket-data'
   destinationData.innerHTML = destination
+
+  destinationWrapper.appendChild(destinationData)
+
+  const wrapperWidth = destinationWrapper.offsetWidth
+  const destinationWidth = destinationData.offsetWidth
+  console.log({destinationWidth, wrapperWidth})
 
   line.appendChild(ticketLabel)
   line.appendChild(ticketData)
