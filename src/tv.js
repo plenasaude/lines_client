@@ -65,7 +65,6 @@ const verifyErrorCount = intervalHandler => () => {
 /******************************************************************************/
 // START DOM MANIPULATION
 function createLine({ ticket, destination, complement }) {
-  destination = 'nvilvnofdmnvodfmn vneiorgv jeirjgobgfbgfbfg'
 
   const line = document.createElement('li')
   line.classList.add('ticket')
