@@ -65,6 +65,8 @@ const verifyErrorCount = intervalHandler => () => {
 /******************************************************************************/
 // START DOM MANIPULATION
 function createLine({ ticket, destination, complement }) {
+  destination = 'nvilvnofdmnvodfmn vneiorgv jeirjgobgfbgfbfg'
+
   const line = document.createElement('li')
   line.classList.add('ticket')
 
@@ -99,6 +101,7 @@ function createLine({ ticket, destination, complement }) {
     const destinationWidth = destinationData.offsetWidth
     if (wrapperWidth < destinationWidth) {
       destinationData.classList.add('scrolling-text')
+      destinationData.style.animationDuration = `${destination.length*360}ms`
     }
   }, 10)
 

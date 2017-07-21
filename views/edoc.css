@@ -132,7 +132,6 @@ body{
 }
 
 #tv-workspace {
-  padding-top: 3vh;
   padding-bottom: 3vh;
   padding-left: 1vw;
   padding-right: 1vw;
@@ -263,16 +262,11 @@ li {
 .fade li {
   -webkit-transition: all 0.4s ease-out;
   opacity: 0;
-  /*height: 12em;*/
 }
 
-/*@media only screen
-  and (min-width: 721px)
-  and (min-width: 1920px){*/
-  .fade .ticket.show{
-    height: 44vh;
-  }
-
+.fade .ticket.show{
+    height: 43vh;
+}
 
 .fade li.show {
   opacity: 1;
@@ -297,15 +291,15 @@ li {
 
 @keyframes example1 {
  100% {
-   transform: translateX(-100%);
+   transform: translateX(-90%);
  }
 
  0% {
-   transform: translateX(100%);
+   transform: translateX(90%);
  }
 }
 
 .scrolling-text{
   /*transform: translateX(100%);*/
-  animation: example1 5s linear 0s infinite;
+  animation: example1 15s linear 0s infinite;
 }
