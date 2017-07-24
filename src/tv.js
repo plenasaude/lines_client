@@ -13,26 +13,16 @@ function beep() {
   beep.play()
 }
 
-/******************************************************************************/
-/******************************************************************************/
-// START HANDLE STATE
 const diffTickets = R.differenceWith(function(t1, t2) {
   const sameTicket = t1.ticket === t2.ticket
   const sameCall = t1.lastEditedAt === t2.lastEditedAt
   return sameTicket && sameCall
 })
 
-const getNewState = R.curry((state, tickets) => R.pipe(
-  diffTickets(R.__, state),
-  R.concat(R.__, state),
+const sortTickets = R.pipe(
   R.sortBy(R.prop('lastEditedAt')),
-  R.reverse,
-  R.take(oldTicketsMaxSize + newTicketMaxSize)
-)(tickets))
-//END HANDLE STATE
-/******************************************************************************/
-/******************************************************************************/
-
+  R.reverse
+)
 
 /******************************************************************************/
 /******************************************************************************/
@@ -67,6 +57,7 @@ const verifyErrorCount = intervalHandler => () => {
 function createLine({ ticket, destination, complement }) {
 
   const line = document.createElement('li')
+  line.id = ticket
   line.classList.add('ticket')
 
   const ticketLabel = document.createElement('span')
@@ -127,41 +118,35 @@ const validElements = R.pipe(
   R.filter(c => c.classList.contains('show'))
 )
 
-const scrollListGroup = (listId, maxElems) => ticketsArr => {
-  const validTickets = R.take(maxElems, ticketsArr)
-  const numberOfNewElements = validTickets.length
-
+const updateList = listId => ticketsArr => {
   const list = document.getElementById(listId)
   const children = validElements(list)
-  const currentListLength = children.length
-  const totalElements = (currentListLength + numberOfNewElements)
-  const nElementsToBeRemoved = totalElements > maxElems ?
-  totalElements - maxElems : 0
-  const elementsToBeRemoved = R.takeLast(nElementsToBeRemoved, children)
+  const ticketsIds = R.pluck('ticket', ticketsArr)
+  const childrenIds = R.pluck('id', children)
+
+  const elementsToBeRemoved =
+    children.filter(c => !R.contains(c.id, ticketsIds))
+  const elementsToBeAdded =
+    ticketsArr.filter(t => !R.contains(t.ticket, childrenIds))
 
   removeElements(elementsToBeRemoved)
-  addNewElements(list, validTickets)
+  addNewElements(list, elementsToBeAdded)
 }
 
 const updateNewList = state => newState => {
-  const scrollNewList = scrollListGroup('new-tickets-list', newTicketMaxSize)
   const newHead = R.take(newTicketMaxSize, newState)
   const oldHead = R.take(newTicketMaxSize, state)
-  return R.pipe(
+  R.pipe(
     diffTickets(newHead),
     R.unless(R.isEmpty, R.tap(beep)),
-    R.unless(R.isEmpty, scrollNewList)
   )(oldHead)
+
+  return updateList('new-tickets-list')(newHead)
 }
 
 const updateOldList = state => newState => {
-  const scrollOldList = scrollListGroup('old-tickets-list', oldTicketsMaxSize)
   const newTail = R.drop(newTicketMaxSize, newState)
-  const oldTail = R.drop(newTicketMaxSize, state)
-  return R.pipe(
-    diffTickets(newTail),
-    R.unless(R.isEmpty, scrollOldList)
-  )(oldTail)
+  return updateList('old-tickets-list')(newTail)
 }
 //END DOM MANIPULATION
 /******************************************************************************/
@@ -181,7 +166,7 @@ function mockFactory(n = 1) {
   let cnt = 0
   function createMockResponse() {
     return {
-      ticket: cnt++,
+      ticket: R.toString(cnt++),
       createdAt: Date.now(),
       destination: 'giche',
       lastEditedAt: Date.now(),
@@ -224,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const refreshQueue = fn => () => Promise.resolve(fn())
     .then(R.tap(verifyErrorCount(intervalHandler)))
-    .then(getNewState(state))
+    .then(sortTickets)
     .then(R.tap(updateNewList(state)))
     .then(R.tap(updateOldList(state)))
     .then(newState => { state = newState })
