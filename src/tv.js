@@ -77,6 +77,7 @@ function createLine({ ticket, destination, complement }) {
 
   const destinationData = document.createElement('span')
   destinationData.innerHTML = destination
+  destinationData.id = `destination-data-${ticket}`
 
   destinationWrapper.appendChild(destinationData)
 
@@ -131,6 +132,16 @@ const updateList = listId => ticketsArr => {
 
   removeElements(elementsToBeRemoved)
   addNewElements(list, elementsToBeAdded)
+}
+
+const setAllDestinations = ticketsArr => {
+  ticketsArr.forEach(t => {
+    const destinationData =
+      document.getElementById(`destination-data-${t.ticket}`)
+      if (destinationData.innerHTML !== t.destination) {
+        destinationData.innerHTML = t.destination
+      }
+  })
 }
 
 const updateNewList = state => newState => {
@@ -212,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(sortTickets)
     .then(R.tap(updateNewList(state)))
     .then(R.tap(updateOldList(state)))
+    .then(R.tap(setAllDestinations))
     .then(newState => { state = newState })
 
   intervalHandler = setInterval(refreshQueue(fetchNewState), 1000)

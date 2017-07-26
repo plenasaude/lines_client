@@ -209,6 +209,10 @@ body{
   padding-left: 15px;
 }
 
+.uppercase {
+  text-transform: uppercase;
+}
+
 .ticket-data {
   display: flex;
   flex-wrap: nowrap;
