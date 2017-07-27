@@ -1,5 +1,5 @@
 const isDev = require('./src/is_dev')
 
 module.exports = {
-  apiUrl: isDev ? 'http://localhost:3006' : 'http://f89c3f5e.ngrok.io',
+  apiUrl: isDev ? 'http://localhost:3006' : 'http://75f96ad5.ngrok.io',
 }
