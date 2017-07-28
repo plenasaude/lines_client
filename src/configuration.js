@@ -51,7 +51,7 @@ exports.get = () => {
     .then(safeParse)
     .then(config => authConfig = {
       axios: axios.create({
-        baseURL: settings.apiUrl,
+        baseURL: config.apiUrl || settings.apiUrl,
         headers: {'Authorization': config.authorization}
       }),
       user: config.user,
@@ -59,4 +59,3 @@ exports.get = () => {
     .return(authConfig)
     .catch(error => Promise.reject({ configPath, error }))
 }
-
