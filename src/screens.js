@@ -16,6 +16,7 @@ function formatLogo() {
 function populateScreen() {
   return lineService.getScreenConfig()
     .then(newScreen => { screenConfig = newScreen })
+    .catch(() => { screenConfig = {} })
     .then(formatLogo)
     .return(screenConfig)
 }
