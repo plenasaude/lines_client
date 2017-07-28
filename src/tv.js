@@ -1,4 +1,5 @@
 const electron = require('electron')
+const swal = require('sweetalert2')
 const R = require('ramda')
 
 const lineService = electron.remote.require('./src/line_service')
@@ -31,20 +32,19 @@ const sortTickets = R.pipe(
 let errorCnt = 0
 
 const incrementErrorCounter = () => { errorCnt += 1 }
-const resetErrorCounter = () => { errorCnt = 0 }
-const verifyErrorCount = intervalHandler => () => {
-  if (errorCnt > 30) {
+const resetErrorCounter = () => {
+  errorCnt = 0
+  if (swal.isVisible()) swal.close()
+}
+const verifyErrorCount = () => {
+  if (errorCnt > 3 && !swal.isVisible()) {
     console.log('ERROR count exceded maximum allowed')
-    if (intervalHandler) clearInterval(intervalHandler)
-
-    // TODO: change this to another key, we may want to test internet connection
-    //in dev
-    if (!isDev) {
-      electron.ipcRenderer.send('application-error', {
-        message: 'Sem acesso a internet',
-        payload: { showLogin: false },
-      })
-    }
+    swal({
+      title: 'Sem conexão com a internet',
+      type: 'error',
+      showConfirmButton: false,
+      allowOutsideClick: false,
+    })
   }
 }
 //END ERROR HANDLING
@@ -217,18 +217,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   electron.ipcRenderer.send('get-logo')
 
-  let intervalHandler = null
   let state = []
 
   const refreshQueue = fn => () => Promise.resolve(fn())
-    .then(R.tap(verifyErrorCount(intervalHandler)))
+    .then(R.tap(verifyErrorCount))
     .then(sortTickets)
     .then(R.tap(updateNewList(state)))
     .then(R.tap(updateOldList(state)))
     .then(R.tap(setAllDestinations))
     .then(newState => { state = newState })
 
-  intervalHandler = setInterval(refreshQueue(fetchNewState), 1000)
+  setInterval(refreshQueue(fetchNewState), 1000)
 
   if (isDev) {
     const mock = mockFactory(1)
