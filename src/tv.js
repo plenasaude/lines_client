@@ -75,6 +75,7 @@ function createLine({ ticket, destination, complement }) {
 
   const destinationWrapper = document.createElement('span')
   destinationWrapper.className = 'ticket-data'
+  destinationWrapper.id = `destination-wrapper-${ticket}`
 
   const destinationData = document.createElement('span')
   destinationData.innerHTML = destination
@@ -139,9 +140,19 @@ const setAllDestinations = ticketsArr => {
   ticketsArr.forEach(t => {
     const destinationData =
       document.getElementById(`destination-data-${t.ticket}`)
-      if (destinationData.innerHTML !== t.destination) {
-        destinationData.innerHTML = t.destination
+    const destinationWrapper =
+      document.getElementById(`destination-wrapper-${t.ticket}`)
+
+    if (destinationData.innerHTML !== t.destination) {
+      destinationData.innerHTML = t.destination
+
+      const destinationWidth = destinationData.offsetWidth
+      const wrapperWidth = destinationWrapper.offsetWidth
+      if (wrapperWidth < destinationWidth) {
+        destinationData.classList.add('scrolling-text')
+        destinationData.style.animationDuration = `${t.destination.length*360}ms`
       }
+    }
   })
 }
 
