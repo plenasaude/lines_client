@@ -20,6 +20,7 @@ const diffTickets = R.differenceWith(function(t1, t2) {
 })
 
 const sortTickets = R.pipe(
+  R.when(R.isNil, R.always([])),
   R.sortBy(R.prop('lastEditedAt')),
   R.reverse
 )
@@ -194,6 +195,7 @@ function mockFactory(n = 1) {
     return R.pipe(
       R.times(createMockResponse),
       R.concat(mock),
+      R.when(R.isNil, R.always([])),
       R.sortBy(R.prop('lastEditedAt')),
       R.reverse,
       R.take(newTicketMaxSize + oldTicketsMaxSize)
