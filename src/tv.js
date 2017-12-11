@@ -55,7 +55,7 @@ const verifyErrorCount = () => {
 /******************************************************************************/
 /******************************************************************************/
 // START DOM MANIPULATION
-function createLine({ ticket, destination, complement }) {
+function createLine({ ticket, destination, patientName, complement }) {
 
   const line = document.createElement('li')
   line.id = ticket
@@ -83,10 +83,20 @@ function createLine({ ticket, destination, complement }) {
 
   destinationWrapper.appendChild(destinationData)
 
+  const patientNameLabel = document.createElement('span')
+  patientNameLabel.className = 'boxed-text label'
+  patientNameLabel.innerHTML = 'Nome'
+
+  const patientNameData = document.createElement('span')
+  patientNameData.className = 'ticket-data'
+  patientNameData.innerHTML = patientName
+
   line.appendChild(ticketLabel)
   line.appendChild(ticketData)
   line.appendChild(destinationLabel)
   line.appendChild(destinationWrapper)
+  line.appendChild(patientNameLabel)
+  line.appendChild(patientNameData)
 
   setTimeout(() => {
     line.classList.add('show')
@@ -192,6 +202,7 @@ function mockFactory(n = 1) {
       ticket: R.toString(cnt++),
       createdAt: Date.now(),
       destination: 'giche',
+      patientName: 'joão santos',
       lastEditedAt: Date.now(),
       preferred: false,
       queue: {
