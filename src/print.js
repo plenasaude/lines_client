@@ -4,7 +4,7 @@ const R = require('ramda')
 
 electron.ipcRenderer.on('ticket', (e, ticket) => {
   document.getElementById('ticket-number').innerHTML = ticket.ticket
-  document.getElementById('ticket-queue').innerHTML = R.path(['queue', 'name'], ticket)
+  document.getElementById('ticket-queue').innerHTML = R.path(['queue', 'placeholderName'], ticket)
   document.getElementById('ticket-preferred').innerHTML =
     ticket.preferred ? 'Preferencial' : 'Normal'
 
