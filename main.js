@@ -18,7 +18,8 @@ let win
 
 function loadApplication() {
   return screens.start()
-    .then(() => {
+    .then((queuesInfo) => {
+      win.queuesInfo = queuesInfo
       win.loadURL(url.format({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file',
@@ -69,6 +70,10 @@ electron.app.on('ready', function () {
 
 electron.ipcMain.on('get-logo', event => {
   event.sender.send('logo', screens.logo())
+})
+
+electron.ipcMain.on('get-queues-info', event => {
+  event.sender.send('queues-info', win.queuesInfo)
 })
 
 electron.ipcMain.on('print-ticket', (event, ticket) => {
