@@ -15,9 +15,9 @@ exports.getScreenConfig = function getScreenConfig() {
   return http(({ user, axios }) => axios.get(url(user)))
 }
 
-exports.createTicket = function createTicket(preferred, queueId) {
-  const url = `/screen/${queueId}`
-  return http(({ axios }) => axios.post(url, { preferred }))
+exports.createTicket = function createTicket(preferred, queue) {
+  const url = `/tickets`
+  return http(({ axios }) => axios.post(url, { preferred, queue: queue  }))
 }
 
 exports.listTickets = function listTickets({ limit }) {

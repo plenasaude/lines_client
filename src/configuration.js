@@ -10,6 +10,9 @@ const readFile = Promise.promisify(fs.readFile)
 const writeFile = Promise.promisify(fs.writeFile)
 
 const configFile = 'edoc_config.json'
+// files are easier to test in development
+// const configFile = 'edoc_config.totem.json'
+// const configFile = 'edoc_config.tv.json'
 const configPath = path.join(os.homedir(), configFile)
 
 let authConfig = null

@@ -87,16 +87,22 @@ function createLine({ ticket, destination, patientName, complement }) {
   patientNameLabel.className = 'boxed-text label'
   patientNameLabel.innerHTML = 'Nome'
 
+  const patientWrapper = document.createElement('span')
+  patientWrapper.className = 'ticket-data'
+  patientWrapper.id = `patient-name-wrapper-${ticket}`
+
   const patientNameData = document.createElement('span')
-  patientNameData.className = 'ticket-data'
   patientNameData.innerHTML = patientName
+  patientNameData.id = `patient-name-data-${ticket}`
+
+  patientWrapper.appendChild(patientNameData)
 
   line.appendChild(ticketLabel)
   line.appendChild(ticketData)
   line.appendChild(destinationLabel)
   line.appendChild(destinationWrapper)
   line.appendChild(patientNameLabel)
-  line.appendChild(patientNameData)
+  line.appendChild(patientWrapper)
 
   setTimeout(() => {
     line.classList.add('show')
@@ -146,21 +152,21 @@ const updateList = listId => ticketsArr => {
   addNewElements(list, elementsToBeAdded)
 }
 
-const setAllDestinations = ticketsArr => {
+const setAllModifiableData = (ticketsArr, dataType, ticketProp) => {
   ticketsArr.forEach(t => {
-    const destinationData =
-      document.getElementById(`destination-data-${t.ticket}`)
-    const destinationWrapper =
-      document.getElementById(`destination-wrapper-${t.ticket}`)
+    const data =
+      document.getElementById(`${dataType}-data-${t.ticket}`)
+    const wrapper =
+      document.getElementById(`${dataType}-wrapper-${t.ticket}`)
 
-    if (destinationData.innerHTML !== t.destination) {
-      destinationData.innerHTML = t.destination
+    if (data.innerHTML !== t[ticketProp]) {
+      data.innerHTML = t[ticketProp]
 
-      const destinationWidth = destinationData.offsetWidth
-      const wrapperWidth = destinationWrapper.offsetWidth
-      if (wrapperWidth < destinationWidth) {
-        destinationData.classList.add('scrolling-text')
-        destinationData.style.animationDuration = `${t.destination.length*360}ms`
+      const width = data.offsetWidth
+      const wrapperWidth = wrapper.offsetWidth
+      if (wrapperWidth < width) {
+        data.classList.add('scrolling-text')
+        data.style.animationDuration = `${t.destination.length*360}ms`
       }
     }
   })
@@ -246,7 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(sortTickets)
     .then(R.tap(updateNewList(state)))
     .then(R.tap(updateOldList(state)))
-    .then(R.tap(setAllDestinations))
+    .then(R.tap(R.curry(setAllModifiableData)(R.__, 'destination', 'destination')))
+    .then(R.tap(R.curry(setAllModifiableData)(R.__, 'patient-name', 'patientName')))
     .then(newState => { state = newState })
 
   setInterval(refreshQueue(fetchNewState), 1000)
