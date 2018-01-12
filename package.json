@@ -29,14 +29,14 @@
   },
   "devDependencies": {
     "electron": "^1.6.11",
-    "electron-builder": "^19.13.0",
-    "electron-updater": "^2.18.2"
+    "electron-builder": "^19.13.0"
   },
   "dependencies": {
     "axios": "^0.16.2",
     "bluebird": "^3.5.0",
     "bootstrap": "^3.3.7",
     "electron-log": "^2.2.7",
+    "electron-updater": "^2.18.2",
     "moment": "^2.18.1",
     "ramda": "^0.24.1",
     "sweetalert2": "^6.6.6"
