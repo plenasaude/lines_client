@@ -27,6 +27,9 @@ function loadApplication() {
         protocol: 'file',
         slashes: true,
       }))
+
+      win.webContents.openDevTools()
+
     })
       
 }
