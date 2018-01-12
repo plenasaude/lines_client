@@ -18,13 +18,17 @@ let win
 
 function loadApplication() {
   return screens.start()
-    .then(() => {
+    .tap((configInfo) => {
+      win.queues = configInfo.queues
+    })
+    .then(configInfo => {
       win.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
+        pathname: path.join(__dirname, 'views', configInfo.type + '.html'),
         protocol: 'file',
         slashes: true,
       }))
     })
+      
 }
 
 function loadErrorView({ message, payload }) {
@@ -69,6 +73,10 @@ electron.app.on('ready', function () {
 
 electron.ipcMain.on('get-logo', event => {
   event.sender.send('logo', screens.logo())
+})
+
+electron.ipcMain.on('get-queues-info', event => {
+  event.sender.send('queues-info', win.queues)
 })
 
 electron.ipcMain.on('print-ticket', (event, ticket) => {

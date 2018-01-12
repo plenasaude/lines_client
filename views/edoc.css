@@ -218,12 +218,13 @@ body{
   flex-wrap: nowrap;
   background-color: #fff;
   color: rgb(0, 0, 0);
-  font-size: 6.5vh;
+  font-size: 3.5vh;
   font-weight: bold;
   width: 95%;
   justify-content: center;
   border-radius: 15px;
   margin-bottom: 15px;
+  padding-bottom: 15px;
   white-space: nowrap;
   overflow: hidden;
 }

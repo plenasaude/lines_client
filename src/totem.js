@@ -4,7 +4,7 @@ const R = require('ramda')
 
 const lineService = electron.remote.require('./src/line_service')
 
-function getTicket(preferred) {
+function getTicket(preferred, queueId) {
 
   const t = { teste: 'teste' }
   swal({
@@ -13,7 +13,7 @@ function getTicket(preferred) {
   })
   swal.showLoading()
 
-  return lineService.createTicket(preferred)
+  return lineService.createTicket(preferred, queueId)
     .then(ticket => {
       return electron
       .ipcRenderer
@@ -31,6 +31,59 @@ function getTicket(preferred) {
       timer: 1500,
       showConfirmButton: false,
     }).catch(swal.noop))
+    .then(() => {
+      electron.ipcRenderer.send('get-queues-info')
+    })
+}
+
+function renderQueueOption(queues) {
+  const mainWrapper = document.getElementById('mainWrapper')
+
+  mainWrapper.innerHTML = ''
+  
+  const header = document.createElement('header')
+  header.className = 'header'
+  header.innerHTML = 'TOQUE NA OPÇÃO'
+
+  mainWrapper.appendChild(header)
+
+  queues.forEach(queue => {
+    const button = document.createElement('button')
+    button.className = 'totem-btn btn-dark'
+    button.innerHTML = queue.placeholderName
+    button.addEventListener('click', () => {
+      renderQueueTypeOption(queue._id)
+    })
+    mainWrapper.appendChild(button)
+  })
+}
+
+function renderQueueTypeOption(queueId) {
+  const mainWrapper = document.getElementById('mainWrapper')
+
+  mainWrapper.innerHTML = ''
+
+  const header = document.createElement('header')
+  header.className = 'header'
+  header.innerHTML = 'TOQUE NA OPÇÃO'
+
+  const button1 = document.createElement('button')
+  button1.className = 'totem-btn btn-dark'
+  button1.innerHTML = 'Normal'
+  button1.addEventListener('click', () => {
+    getTicket(false, queueId)
+  })
+
+  const button2 = document.createElement('button')
+  button2.className = 'totem-btn btn-light'
+  button2.innerHTML = 'Preferencial'
+  button2.addEventListener('click', () => {
+    getTicket(true, queueId)
+  })
+  
+  mainWrapper.appendChild(header)
+  mainWrapper.appendChild(button1)
+  mainWrapper.appendChild(button2)
 }
 
 electron.ipcRenderer.on('logo', (event, logo) => {
@@ -41,16 +94,17 @@ electron.ipcRenderer.on('logo', (event, logo) => {
   }
 })
 
+electron.ipcRenderer.on('queues-info', (event, queuesInfo) => {
+  console.log(queuesInfo)
+
+  if(queuesInfo.length === 1) return renderQueueTypeOption(queuesInfo[0]._id)
+
+  renderQueueOption(queuesInfo)
+    
+})
+
 document.addEventListener('DOMContentLoaded', function() {
   electron.ipcRenderer.send('get-logo')
-
-  document.getElementById('normal_queue')
-    .addEventListener('click', () => {
-      getTicket(false)
-    })
-
-  document.getElementById('preferencial_queue')
-    .addEventListener('click', () => {
-      getTicket(true)
-    })
+  electron.ipcRenderer.send('get-queues-info')
 })
+

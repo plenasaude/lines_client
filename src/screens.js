@@ -11,14 +11,15 @@ function formatLogo() {
     screenConfig.logo : `data:image/png;base64, ${screenConfig.logo}`
 
   screenConfig.logo = imgBase64
+  return screenConfig
 }
 
 function populateScreen() {
   return lineService.getScreenConfig()
-    .then(newScreen => { screenConfig = newScreen })
+    .tap(newScreen => { screenConfig = newScreen })
     .catch(() => { screenConfig = {} })
     .then(formatLogo)
-    .return(screenConfig)
+
 }
 
 module.exports = {

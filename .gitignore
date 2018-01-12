@@ -6,3 +6,4 @@ eDoc-*
 *.log
 *.swp
 .env
+package-lock.json
