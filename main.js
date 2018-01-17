@@ -11,6 +11,8 @@ const autoupdate = require('./src/autoupdate')
 const configuration = require('./src/configuration')
 const screens = require('./src/screens')
 
+require('electron-debug')({ enabled: true })
+
 log.info('App starting...')
 
 // Keep a global reference of the window object, if you don't, the window will
