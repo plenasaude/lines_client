@@ -144,3 +144,17 @@ No primeiro momento o totem sempre rodará em máquinas Windowns e a TV em Linux
 Uma forma de recuperar o arquivo de errors remotamente seria interessante.
 
 As aplicações preferencialmente devem obrigar que o arquivo de configuração seja somente leitura.
+
+# Build:
+
+  1. Limpar diretório ./dist
+  1.  aumentar a versão do package.json respeitando as regras do SEMVER,
+      caso contrário o auto updates quebrará o executável.
+  1.  `npm rum dist:win`, Compila a aplicação para Windows 32 e 64.
+  1. Pushar o código na master para o Github
+  1. Criar uma nova relase, com o nome igual a versão do package.json com v na
+     frente. Ou seja versão do package.json 1.0.0, nome do relase v1.0.0
+  1. Fazer upload do arquivo .exe e latest.yml dentro da nova versão do Github
+  1. Salvar release. Lembre-se que esse passo vai trigar o auto update dos
+     programas rodando atualmente, evitar fazer isso em horário comercial. 
+
