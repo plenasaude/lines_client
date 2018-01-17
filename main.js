@@ -4,6 +4,7 @@ const { autoUpdater } = require('electron-updater')
 const path = require('path')
 const url = require('url')
 const R = require('ramda')
+const Promise = require('bluebird')
 
 const isDev = require('./src/is_dev')
 const autoupdate = require('./src/autoupdate')
@@ -16,19 +17,24 @@ log.info('App starting...')
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-function loadApplication() {
-  return screens.start()
-    .tap((configInfo) => {
-      win.queues = configInfo.queues
+function getConfigInfoErrors(configInfo) {
+  if (!configInfo || R.isEmpty(configInfo)) {
+    return Promise.reject({
+      message: 'Erro ao fazer login: tela não encontrada',
+      payload: { showLogin: true, error: 'empty configInfo' }
     })
-    .then(configInfo => {
-      win.loadURL(url.format({
-        pathname: path.join(__dirname, 'views', configInfo.type + '.html'),
-        protocol: 'file',
-        slashes: true,
-      }))
+  } else if (!configInfo.queues) {
+    return Promise.reject({
+      message: 'Erro ao fazer login: tela não contem nenhuma fila',
+      payload: { showLogin: true, error: 'no queues' }
     })
-      
+  } else if (!configInfo.type) {
+    return Promise.reject({
+      message: 'Erro ao fazer login: tipo da tela não encontrado',
+      payload: { showLogin: true, error: 'no screen type' }
+    })
+  }
+  return configInfo
 }
 
 function loadErrorView({ message, payload }) {
@@ -41,6 +47,20 @@ function loadErrorView({ message, payload }) {
   win.webContents.on('did-finish-load', () => {
     win.webContents.send('data', { message, payload })
   })
+}
+
+function loadApplication() {
+  return screens.start()
+    .then(getConfigInfoErrors)
+    .then(configInfo => {
+      win.queues = configInfo.queues
+      win.loadURL(url.format({
+        pathname: path.join(__dirname, 'views', configInfo.type + '.html'),
+        protocol: 'file',
+        slashes: true,
+      }))
+    })
+    .catch(loadErrorView)
 }
 
 function createWindow() {
