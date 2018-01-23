@@ -5,7 +5,7 @@ const R = require('ramda')
 const lineService = electron.remote.require('./src/line_service')
 const isDev = electron.remote.require('./src/is_dev')
 
-const oldTicketsMaxSize = 4
+const oldTicketsMaxSize = 3
 const newTicketMaxSize = 2
 
 function beep() {
@@ -97,11 +97,11 @@ function createLine({ ticket, destination, patientName, complement }) {
 
   patientWrapper.appendChild(patientNameData)
 
-  line.appendChild(ticketLabel)
+  // line.appendChild(ticketLabel)
   line.appendChild(ticketData)
-  line.appendChild(destinationLabel)
+  // line.appendChild(destinationLabel)
   line.appendChild(destinationWrapper)
-  line.appendChild(patientNameLabel)
+  // line.appendChild(patientNameLabel)
   line.appendChild(patientWrapper)
 
   setTimeout(() => {
@@ -111,6 +111,12 @@ function createLine({ ticket, destination, patientName, complement }) {
     if (wrapperWidth < destinationWidth) {
       destinationData.classList.add('scrolling-text')
       destinationData.style.animationDuration = `${destination.length*360}ms`
+    }
+    const patientWrapperWidth = patientWrapper.offsetWidth
+    const patientNameWidth = patientNameData.offsetWidth
+    if (patientWrapperWidth < patientNameWidth) {
+      patientNameData.classList.add('scrolling-text')
+      patientNameData.style.animationDuration = `${patientName.length*360}ms`
     }
   }, 10)
 
