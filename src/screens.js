@@ -5,7 +5,7 @@ const lineService = require('./line_service')
 let screenConfig = {}
 
 function formatLogo() {
-  if (!screenConfig.logo) return screenConfig
+  if (!screenConfig || !screenConfig.logo) return screenConfig
 
   const imgBase64 = R.test(/^data:image\/png;base64,/, screenConfig.logo) ?
     screenConfig.logo : `data:image/png;base64, ${screenConfig.logo}`
@@ -17,7 +17,13 @@ function formatLogo() {
 function populateScreen() {
   return lineService.getScreenConfig()
     .tap(newScreen => { screenConfig = newScreen })
-    .catch(() => { screenConfig = {} })
+    .catch(e => { 
+      if (R.path(['error', 'code'], e) === 'ENOENT'){
+        screenConfig = {}
+      } else {
+        screenConfig = null
+      }
+    })
     .then(formatLogo)
 
 }
