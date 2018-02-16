@@ -20,7 +20,12 @@ log.info('App starting...')
 let win
 
 function getConfigInfoErrors(configInfo) {
-  if (!configInfo || R.isEmpty(configInfo)) {
+  if (!configInfo) {
+    return Promise.reject({
+      message: 'Erro ao fazer login: não há conexão com a internet',
+      payload: { showLogin: false, error: 'empty configInfo' }
+    })
+  } else if (R.isEmpty(configInfo)) {
     return Promise.reject({
       message: 'Erro ao fazer login: tela não encontrada',
       payload: { showLogin: true, error: 'empty configInfo' }
