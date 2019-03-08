@@ -9,7 +9,7 @@ function getTicket(preferred, queueId) {
   const t = { teste: 'teste' }
   swal({
     title: 'Imprimindo senha',
-    text: 'Aguarda alguns instantes',
+    text: 'Aguarde alguns instantes',
   })
   swal.showLoading()
 
