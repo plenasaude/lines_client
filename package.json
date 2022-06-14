@@ -1,6 +1,6 @@
 {
   "name": "edoc",
-  "version": "2.2.1",
+  "version": "3.0.0",
   "description": "eDoc lines clients",
   "main": "main.js",
   "scripts": {
