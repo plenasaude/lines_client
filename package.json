@@ -11,7 +11,7 @@
     "build:mac": "build --win --mac",
     "dist:win": "electron-builder --windows --x64 --ia32"
   },
-  "author": "eDoc Saude <contato@edocsaude.com>",
+  "author": "Plena Saude <desenvolvimento@plenasaude.com.br>",
   "build": {
     "appId": "com.github.edocsaude.edoc",
     "productName": "eDoc",
